@@ -43,9 +43,13 @@ const DOMAIN_TOOLTIP_CONF = {
  */
 function getLink() {
   let linkRotation = [
+    /*
+      CONSEAL CHANGE
+        - Add link to Conseal github
+    */
     {
       url: constants.REVIEW_LINKS[constants.BROWSER] || constants.REVIEW_LINKS.chrome, // Default to Chrome if unknown
-      text: "popup_review_pb",
+      text: "popup_review_conseal",
       icon: "ui-icon-star",
       odds: 0.3 // Odds of all links should add up to 1
     },
@@ -55,6 +59,7 @@ function getLink() {
       icon: "ui-icon-heart",
       odds: 0.7
     }
+    /* END CONSEAL CHANGE */
   ];
 
   let rand = Math.random();

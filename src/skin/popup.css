@@ -20,7 +20,7 @@ body#main {
   box-sizing: border-box;
 
   background: #fefefe;
-  color: #333;
+  color: #56646C;
   font-family: helvetica, arial, sans-serif;
   font-size: 12px;
 
@@ -29,7 +29,7 @@ body#main {
 
   min-width: 430px; /* Chrome */
   max-width: 100%;  /* FF android */
-  min-height: 300px;
+  min-height: 500px;
 }
 
 @media screen and (min--moz-device-pixel-ratio:0) {
@@ -65,7 +65,7 @@ a:hover {
 
 button {
     /* needed for Firefox */
-    color: #333;
+    color: #56646C;
 }
 
 .clicker {
@@ -158,8 +158,13 @@ a.removeOrigin:hover {
 
 #privacy-badger-header {
     display: flex;
+    align-items: center;
+    margin: -7px -12px;
+    padding: 7px 12px;
+    background: #e4eff5;
     color: #505050;
     font-size: 16px;
+    height: fit-content;
     margin-bottom: 5px;
 }
 
@@ -180,7 +185,7 @@ a.removeOrigin:hover {
     }
 }
 #badger-title-div h2 {
-    color: #000;
+    color: #56646C;
     font-size: 24px;
     font-weight: normal;
     font-family: "Chunk-Five", serif;
@@ -264,7 +269,7 @@ button.cta-button:hover, a.cta-button:hover {
   top: 0;
   left: 0;
   z-index: 99;
-  background-color: #000;
+  background-color: #56646C;
   opacity: 0.1;
   width: 100%;
   height: 100%;
@@ -545,7 +550,7 @@ a.overlay-close:hover {
     border: 2px solid #f06a0a;
 }
 .toggle-header:hover .toggle-header-title {
-    color: #000;
+    color: #56646C;
 }
 .toggle-header-title {
     flex: 1;

@@ -1172,15 +1172,15 @@ Badger.prototype = {
     if (!utils.isRestrictedUrl(tab_url) &&
         self.isPrivacyBadgerEnabled(extractHostFromURL(tab_url))) {
       iconFilename = {
-        16: chrome.runtime.getURL("icons/badger-16.png"),
-        32: chrome.runtime.getURL("icons/badger-32.png"),
-        64: chrome.runtime.getURL("icons/badger-64.png")
+        16: chrome.runtime.getURL("icons/seal-16.png"),
+        32: chrome.runtime.getURL("icons/seal-32.png"),
+        64: chrome.runtime.getURL("icons/seal-64.png")
       };
     } else {
       iconFilename = {
-        16: chrome.runtime.getURL("icons/badger-16-disabled.png"),
-        32: chrome.runtime.getURL("icons/badger-32-disabled.png"),
-        64: chrome.runtime.getURL("icons/badger-64-disabled.png")
+        16: chrome.runtime.getURL("icons/seal-16-disabled.png"),
+        32: chrome.runtime.getURL("icons/seal-32-disabled.png"),
+        64: chrome.runtime.getURL("icons/seal-64-disabled.png")
       };
     }
 
