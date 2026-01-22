@@ -43,12 +43,17 @@ let exports = {
   // Browser (modified during the build process)
   BROWSER: "firefox",
 
+  /*
+    CONSEAL CHANGE
+      - Change links to Conseal GitHub repository
+  */
   REVIEW_LINKS: {
-    chrome: "https://chromewebstore.google.com/detail/privacy-badger/pkehgijcmpdhfbdbbnkijodmdjhbjlgp/reviews",
-    firefox: "https://addons.mozilla.org/en-US/firefox/addon/privacy-badger17/",
-    edge: "https://microsoftedge.microsoft.com/addons/detail/privacy-badger/mkejgcgkdlddbggjhhflekkondicpnop",
-    opera: "https://addons.opera.com/en/extensions/details/privacy-badger/",
+    chrome: "https://github.com/goggybox/conseal",
+    firefox: "https://github.com/goggybox/conseal",
+    edge: "https://github.com/goggybox/conseal",
+    opera: "https://github.com/goggybox/conseal",
   },
+  /* END CONSEAL CHANGE */
 
   FP_CDN_DOMAINS: new Set([
     'd.alicdn.com',

@@ -1,6 +1,6 @@
 {
     "name": {
-        "message": "Privacy Badger",
+        "message": "Conseal",
         "description": "The name of this extension."
     },
     "description": {
@@ -57,6 +57,10 @@
     },
     "popup_review_pb": {
         "message": "Enjoying Privacy Badger? Leave a review!",
+        "description": "A link in the popup footer shown 30% of the time instead of 'Donate to EFF'."
+    },
+    "popup_review_conseal": {
+        "message": "Enjyoing Conseal? Give our GitHub repo a star!",
         "description": "A link in the popup footer shown 30% of the time instead of 'Donate to EFF'."
     },
     "version": {
