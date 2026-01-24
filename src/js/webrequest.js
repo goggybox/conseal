@@ -1234,6 +1234,22 @@ function dispatcher(request, sender, sendResponse) {
 
   switch (request.type) {
 
+    // CONSEAL CHANGES
+
+    case "getSecurityLevel": {
+      sendResponse(
+        badger.getSettings().getItem("securityLevel")
+      );
+      break;
+    }
+
+    case "setSecurityLevel": {
+      badger.getSettings().setItem("securityLevel", request.level);
+      sendResponse();
+    }
+
+    // END CONSEAL CHANGES
+
   case "checkEnabled": {
     sendResponse(badger.isPrivacyBadgerEnabled(
       extractHostFromURL(sender.tab.url)

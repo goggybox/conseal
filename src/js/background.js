@@ -764,6 +764,9 @@ Badger.prototype = {
 
   /**
    * Default Privacy Badger settings
+   * 
+   * CONSEAL CHANGES:
+   *    - add setting "securityLevel" (0 = default Privacy Badger, 1 = non-breaking security, 2 = max security)
    */
   defaultSettings: {
     checkForDNTPolicy: true,
@@ -784,6 +787,7 @@ Badger.prototype = {
     showNonTrackingDomains: false,
     widgetReplacementExceptions: [],
     widgetSiteAllowlist: {},
+    securityLevel: 0,
   },
 
   /**
