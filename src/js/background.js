@@ -28,6 +28,10 @@ import TabData from "./tabdata.js";
 import webrequest from "./webrequest.js";
 import utils from "./utils.js";
 
+// ---------- CONSEAL CHANGES ----------
+import conseal from "./conseal/controller.js";
+// ----------   END CHANGES   ----------
+
 /**
  * Privacy Badger constructor.
  *
@@ -82,6 +86,13 @@ function Badger(from_qunit) {
     self.heuristicBlocking = new HeuristicBlocking.HeuristicBlocker(self.storage);
 
     self.setPrivacyOverrides();
+
+    // ---------- CONSEAL CHANGES ----------
+    // initialise conseal
+    conseal.init({
+      badger: self
+    });
+    // ----------   END CHANGES   ----------
 
     // kick off async initialization steps
     let pbconfigPromise = self.initPbconfig().catch(console.error);

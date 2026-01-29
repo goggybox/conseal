@@ -29,6 +29,11 @@ import incognito from "./incognito.js";
 import surrogates from "./surrogates.js";
 import utils from "./utils.js";
 
+// ---------- CONSEAL CHANGES ----------
+import conseal from "./conseal/controller.js";
+import { buildContext } from "./conseal/context.js";
+// ----------   END CHANGES   ----------
+
 /***************** Blocking Listener Functions **************/
 
 /**
@@ -118,7 +123,25 @@ function onBeforeRequest(details) {
   }
 
   if (!utils.isThirdPartyDomain(request_host, tab_host)) {
+    // ---------- CONSEAL CHANGES ----------
+    // REMOVE LINE: return;
+    
+    // hand first-party requests over to conseal
+    const ctx = buildContext(details, {
+      tabId: tab_id,
+      frameId: frame_id,
+      tabHost: tab_host,
+      requestHost: request_host,
+      swRequest: sw_request,
+      fromCurrentTab: from_current_tab,
+      frameData
+    });
+
+    conseal.handle(ctx);
+
     return;
+
+    // ----------   END CHANGES   ----------
   }
 
   // TODO !from_current_tab requests shouldn't go through allowedOnTab()
@@ -1238,13 +1261,13 @@ function dispatcher(request, sender, sendResponse) {
 
     case "getProtectionLevel": {
       sendResponse(
-        badger.getSettings().getItem("protectionLevel")
+        conseal.getProtectionLevel()
       );
       break;
     }
 
     case "setProtectionLevel": {
-      badger.getSettings().setItem("protectionLevel", request.level);
+      conseal.setProtectionLevel(request.level)
       sendResponse();
     }
 

@@ -411,6 +411,8 @@ function init() {
   $("#share-close").on("click", function (e) {
     e.preventDefault();
     $("#share-overlay").toggleClass('active', false);
+    const body = document.getElementById("main");
+    body.classList.remove("lock-scroll"); // <---------- CONSEAL CHANGE ----------
   });
   $("#copy-button").on("click", function() {
     $("#share-output").select();
@@ -598,6 +600,21 @@ function deactivateOnSite() {
 function share() {
   $("#share-overlay").toggleClass('active');
   let share_msg = chrome.i18n.getMessage("share_base_message");
+
+  // ---------- CONSEAL CHANGES ----------
+  let overlay = document.getElementById("share-overlay");
+  let body = document.getElementById("main");
+  if (overlay.classList.contains("active")) {
+    // we are opening the share overlay. prevent scrolling and scroll to the top
+    body.classList.add("lock-scroll");
+    window.scrollTo(0,0);
+  } else {
+    // we are closing the share overlay. unlock scrolling
+    body.classList.remove("lock-scroll");
+  }
+
+
+  // ----------   END CHANGES   ----------
 
   // only add language about found trackers if we actually found trackers
   // (but regardless of whether we are actually blocking them)
