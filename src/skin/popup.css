@@ -29,7 +29,7 @@ body#main {
 
     min-width: 430px; /* Chrome */
     max-width: 100%;  /* FF android */
-    overflow-y: auto;
+    overflow-y:scroll;
     max-height: 500px;
 }
 
@@ -68,13 +68,38 @@ html {
     display: grid;
     grid-template-rows: max-content 1fr max-content;
     min-height: 300px;
+    flex-shrink: 0;
+    padding-bottom: 80px; /* large bottom padding to allow space for footer */
 }
 
-#conseal-content {
-    min-height: 200px;
+#conseal-flexbox {
     background: var(--conseal-background-colour);
     margin: -7px -12px;
     margin-top: -45px;
+    padding: 10px;
+}
+#conseal-flexbox.disabled {
+    display: none;
+}
+
+#conseal-content-header {
+    padding-bottom: 10px;
+    display: flex;
+    gap: 0px;
+    place-items: center;
+}
+#conseal-content-header h2 {
+    font-family: "Antipasto";
+    font-size: 22px;
+}
+
+#seal-icon {
+    height: 40px;
+    padding: 0 5px;
+}
+
+#conseal-content {
+    min-height: 400px;
 }
 
 #protection-level-container {
@@ -170,23 +195,28 @@ html {
 /* privacy badger */
 #privacy-badger-flexbox {
     min-height: 200px;
+    height: fit-content;
+    color: var(--privacy-badger-text-colour);
     background: var(--privacy-badger-background-colour);
     margin: -7px -12px;
-    margin-bottom: 500px;
+    padding: 0px 10px;
+}
+
+#privacy-badger-flexbox * {
+    /* color: var(--privacy-badger-text-colour); */
 }
 
 #privacy-badger-content-header {
     display: flex;
     gap: 15px;
     place-items: center;
-    padding: 0px 10px;
     margin-bottom: 10px;
+    color: var(--privacy-badger-text-colour)
 }
 #privacy-badger-content-header h2 {
     font-size: 20px;
     font-weight: normal;
     font-family: "Chunk-Five", serif;
-    color: var(--primary-text-colour);
 }
 #pb-logo {
     height: 32px;
@@ -225,6 +255,36 @@ body#main {
     font-family: "Chunk-Five";
     src: url("./fonts/Chunk.ttf");
 }
+
+@font-face {
+    font-family: "Antipasto";
+    src: url("./fonts/Antipasto-Pro-ExtraBold-trial.ttf");
+}
+
+@font-face {
+    font-family: "Manjari";
+    src: url("./fonts/Manjari-Thin.ttf") format("truetype");
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Manjari";
+    src: url("./fonts/Manjari-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Manjari";
+    src: url("./fonts/Manjari-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
 
 a, a:visited {
     color: #222;
@@ -356,7 +416,7 @@ a.removeOrigin:hover {
     }
 }
 #badger-title-div h2 {
-    color: #56646C;
+    color: var(--privacy-badger-text-colour);
     font-size: 24px;
     font-weight: normal;
     font-family: "Chunk-Five", serif;
@@ -389,9 +449,9 @@ body#main #blockedResourcesContainer, #special-browser-page, #disabled-site-mess
 }
 
 button.cta-button, a.cta-button {
-    background-color: #ff641c;
-    border: 2px solid #ff641c;
-    color: #fff;
+    background-color: var(--primary-focus-colour);
+    border: 2px solid var(--primary-focus-colour);
+    color: var(--primary-text-colour);
     font-weight: bold;
     font-size: 17px;
     line-height: 1.5;
@@ -400,13 +460,13 @@ button.cta-button, a.cta-button {
     width: 100%;
 }
 button.cta-button:hover, a.cta-button:hover {
-    background-color: #f58728;
+    background-color: var(--primary-focus-colour);
 }
 
 .clickerContainer {
     max-height: 290px;
     overflow-y: auto;
-    background-color: #e8e9ea;
+    background-color: var(--primary-background-colour);
     position: relative;
     margin-top: 25px;
 }
@@ -420,7 +480,7 @@ button.cta-button:hover, a.cta-button:hover {
     left: 215px;
     right: 0;
     z-index: 30;
-    background: #fefefe;
+    background: var(--privacy-badger-background-colour);
     padding-top: 4px;
     width: 117px;
 }
@@ -440,7 +500,7 @@ button.cta-button:hover, a.cta-button:hover {
   top: 0;
   left: 0;
   z-index: 99;
-  background-color: #56646C;
+  background-color: var(--primary-background-colour);
   opacity: 0.1;
   width: 100%;
   height: 100%;
@@ -451,7 +511,7 @@ button.cta-button:hover, a.cta-button:hover {
   top: 0;
   left: 0;
   z-index: 100;
-  background-color: #fff;
+  background-color: var(--primary-background-colour);
   color: #333;
   text-align: start;
   margin: 8px;
@@ -725,8 +785,8 @@ textarea:focus {
     align-items: center;
     cursor: pointer;
     transition: border 0.25s ease-out;
-    background-color: #fff;
-    border: 2px solid #fff;
+    background-color: var(--primary-button-background-colour);
+    border: 2px solid var(--primary-button-border-colour);
     border-radius: 3px;
     padding: 0;
     width: 100%;

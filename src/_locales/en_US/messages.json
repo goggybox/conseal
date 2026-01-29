@@ -60,7 +60,7 @@
         "description": "A link in the popup footer shown 30% of the time instead of 'Donate to EFF'."
     },
     "popup_review_conseal": {
-        "message": "Enjyoing Conseal? Give our GitHub repo a star!",
+        "message": "Enjoying Conseal? Give our GitHub repo a star!",
         "description": "A link in the popup footer shown 30% of the time instead of 'Donate to EFF'."
     },
     "version": {
