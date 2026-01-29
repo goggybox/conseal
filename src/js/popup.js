@@ -200,6 +200,10 @@ function updateProtectionLevelDisplayed(new_level) {
   const txt = ["LOW PROTECTION", "MILD PROTECTION", "HIGH PROTECTION"];
   textElem.textContent = txt[protection_level];
 
+  // if low protection, hide conseal content by adding "disabled" class.
+  const consealFlexbox = document.getElementById("conseal-flexbox");
+  consealFlexbox.classList.toggle("disabled", protection_level === 0);
+
   // update display circle element
   const circleElem = document.getElementById("protection-level-circle");
   const colours = ["var(--security-level-low-colour)", "var(--security-level-mild-colour)", "var(--security-level-high-colour)"];
