@@ -17,19 +17,29 @@
 
 /* popup only (not options page) */
 body#main {
-  box-sizing: border-box;
+    box-sizing: border-box;
 
-  background: #fefefe;
-  color: #56646C;
-  font-family: helvetica, arial, sans-serif;
-  font-size: 12px;
+    background: var(--primary-background-colour);
+    color: #56646C;
+    font-family: helvetica, arial, sans-serif;
+    font-size: 12px;
 
-  margin: 0;
-  padding: 7px 12px;
+    margin: 0;
+    padding: 7px 12px;
 
-  min-width: 430px; /* Chrome */
-  max-width: 100%;  /* FF android */
-  min-height: 500px;
+    min-width: 430px; /* Chrome */
+    max-width: 100%;  /* FF android */
+    overflow-y: auto;
+    max-height: 500px;
+}
+
+html, body {
+    padding: 0;
+    margin: 0;
+}
+
+html {
+    overflow: hidden;
 }
 
 @media screen and (min--moz-device-pixel-ratio:0) {
@@ -38,6 +48,166 @@ body#main {
         width: 430px;     /* FF desktop */
     }
 }
+
+/* ------------------------------ */
+/*       CONSEAL ADDITIONS        */
+/* ------------------------------ */
+
+/* conseal content */
+#content-container {
+    /* 
+        Layout of popup is now:
+            HEADER
+            CONSEAL CONTENT       `|
+            ORIGINAL PB CONTENT    > these three compose the grid
+            FOOTER                ,|
+
+        The grid needs to be a minimum of 400px tall. If the three rows do not have combined minimum
+        heights of >=400px, original pb content will grow to fill the extra height.
+    */
+    display: grid;
+    grid-template-rows: max-content 1fr max-content;
+    min-height: 300px;
+}
+
+#conseal-content {
+    min-height: 200px;
+    background: var(--conseal-background-colour);
+    margin: -7px -12px;
+    margin-top: -45px;
+}
+
+#protection-level-container {
+    background: var(--primary-header-background);
+    border-top: 1px solid rgba(0,0,0,0.1);
+    width: 171px; /* 132px for circle+text, */
+    display: flex;
+    place-items: center;
+    justify-self: end;
+    justify-content: end;
+    padding: 0;
+    margin: 0;
+    margin-right: 15px;
+    user-select: none;
+    cursor: pointer;
+    position: relative;
+    z-index: 10;
+    box-shadow: 0 -8px 12px -4px rgba(0,0,0,0.4),  0 8px 12px -4px rgba(0,0,0,0.15);
+}
+#protection-level-text-container {
+    width: 100%;
+    padding: 5px 0px 6px 7px; 
+    display: flex;
+    gap: 7px;
+    justify-content: start;
+    place-items: center;
+}
+#protection-level-circle {
+    width: 11px;
+    height: 11px;
+    border-radius: 10px;
+    background: var(--security-level-high-colour);
+    transform: translateY(-10%);
+}
+#protection-level-text {
+    font-size: 12px;
+    color: var(--primary-text-colour);
+    padding: 0;
+    padding-top: 2px;
+    margin: 0;
+}
+#protection-level-selector {
+    font-size: 20px;
+    padding: 0px 8px 0px 3px;
+    margin: 0;
+    margin-bottom: -5px;
+    margin-top: -5px;
+    transform: translateY(-5px);
+}
+#protection-level-selector * {
+    padding: 0;
+    margin: 0;
+}
+#protection-selector {
+    position: absolute;
+    padding-top: 3px;
+    top: 106px;
+    right: 0;
+    background: var(--primary-header-background);
+    width: 153px;
+    margin: 0;
+    margin-right: 15px;
+    justify-self: end;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+#protection-selector.hidden {
+    display: none;
+}
+.protection-level {
+    padding: 5px 0px 6px 7px;
+    color: var(--primary-text-colour);
+}
+.protection-level:hover {
+    background: rgba(0,0,0,0.1);
+}
+.protection-level.hidden {
+    display: none;
+}
+
+#header-container {
+    margin: -7px -12px;
+    margin-bottom: 15px;
+    display: grid;
+    position: sticky;
+    overflow: visible;
+    z-index: 999;
+    top: 0;
+    left: 0;
+}
+
+/* privacy badger */
+#privacy-badger-flexbox {
+    min-height: 200px;
+    background: var(--privacy-badger-background-colour);
+    margin: -7px -12px;
+    margin-bottom: 500px;
+}
+
+#privacy-badger-content-header {
+    display: flex;
+    gap: 15px;
+    place-items: center;
+    padding: 0px 10px;
+    margin-bottom: 10px;
+}
+#privacy-badger-content-header h2 {
+    font-size: 20px;
+    font-weight: normal;
+    font-family: "Chunk-Five", serif;
+    color: var(--primary-text-colour);
+}
+#pb-logo {
+    height: 32px;
+    opacity: 0.75;
+    margin-bottom: 2px;
+}
+
+/* general */
+
+footer {
+    background: var(--primary-footer-background);
+    z-index: 999;
+    position: fixed;
+    bottom: 0;
+    margin: -0px -12px;
+    width: 100%;
+}
+
+/* ------------------------------ */
+/*      END CONSEAL ADDITIONS     */
+/* ------------------------------ */
 
 /* Override min-width 430px, which is only necessary for Chrome and causes the popup to be larger than most phone screens */
 /* Using a @media (max-width) query would affect Chrome Desktop as well. */
@@ -60,7 +230,7 @@ a, a:visited {
     color: #222;
 }
 a:hover {
-    color: #f06a0a;
+    color: var(--primary-hover-colour);
 }
 
 button {
@@ -158,14 +328,15 @@ a.removeOrigin:hover {
 
 #privacy-badger-header {
     display: flex;
+    position: relative;
+    z-index: 9999;
     align-items: center;
-    margin: -7px -12px;
-    padding: 7px 12px;
-    background: #e4eff5;
+    margin-bottom: 0;
+    padding: 5px 10px;
+    background: var(--primary-header-background);
     color: #505050;
     font-size: 16px;
     height: fit-content;
-    margin-bottom: 5px;
 }
 
 #badger-logo-div {
@@ -322,10 +493,11 @@ body#main #pbInstructions a, #firstparty-protections-container a, #donate a {
     text-decoration: underline;
     color: black;
     font-weight: bold;
+    
 }
 /* popup only (not options page) */
 body#main #pbInstructions a:hover, #firstparty-protections-container a:hover, #donate a:hover {
-    color: #ec9329;
+    color: var(--primary-hover-colour);
 }
 #instructions-firstparty-description, #youtube-message {
     background-color: #e8e9ea;
@@ -344,11 +516,11 @@ body#main #pbInstructions a:hover, #firstparty-protections-container a:hover, #d
 }
 
 #report-youtube-message a, #report-youtube-message {
-    color: #F06A0A;
+    color: var(--primary-hover-colour);
 }
 
 #report-youtube-message a:hover {
-    color: #ec9329
+    color: var(--primary-hover-colour);
 }
 
 #no-third-parties {
@@ -363,8 +535,9 @@ body#main #pbInstructions a:hover, #firstparty-protections-container a:hover, #d
     text-align: center;
 }
 .pbButton {
-    background-color: #fefefe;
-    border: 2px solid;
+    background-color: var(--primary-button-background-colour);
+    border: 2px solid var(--primary-button-border-colour);
+    color: var(--primary-text-colour);
     border-radius: 3px;
     cursor: pointer;
     /* systemfontstack.com */
@@ -383,10 +556,10 @@ body#main #pbInstructions a:hover, #firstparty-protections-container a:hover, #d
     transform: translateY(1px);
 }
 .pbButton:hover:enabled {
-    border: 2px solid #F06A0A;
+    border: 2px solid var(--primary-hover-colour);
 }
 .pbButton:focus-visible {
-    border: 2px solid #F06A0A;
+    border: 2px solid var(--primary-hover-colour);
     outline: none;
 }
 .pbButton:disabled {
@@ -408,19 +581,19 @@ body#main #pbInstructions a:hover, #firstparty-protections-container a:hover, #d
 }
 .overlay {
   position: absolute;
-  top: 0;
+  top: 80px;
   left: 0;
   width: 100%;
   height: 100%;
-  min-height: 300px;
+  min-height: 200px;
   display: block;
   font-size: 0.8em;
   z-index: -1;
   opacity: 0;
   padding: 3%;
   box-sizing: border-box;
-  color: #ccc;
-  background: url("/skin/background.png");
+  color: var(--primary-text-colour);
+  background: var(--primary-background-colour);
   transition: opacity .1s ease;
   overflow-y: auto;
 }
@@ -460,7 +633,7 @@ a.overlay-close {
   background: none;
   border: 0;
   font-size: 1.4em;
-  color: #ccc;
+  color: var(--primary-text-colour);
   text-decoration: none;
   margin-inline-start: 10px;
 }
@@ -469,12 +642,23 @@ a.overlay-close:before {
   margin: 4px;
 }
 a.overlay-close:hover {
-    color: #f06a0a;
+    color: var(--primary-hover-colour);
+}
+textarea {
+    color: var(--primary-text-colour);
+    background: var(--primary-textarea-background-colour);
+    text-decoration: none;
+    outline: none;
+    border: 2px solid var(--primary-textarea-border-colour);
+    resize: none;
+}
+textarea:focus {
+    border: 2px solid var(--focus-border-colour);
 }
 #share-output {
   display: block;
   width: 98%;
-  height: 60%;
+  height: 40%;
 }
 #overlay p {
   font-size: 12px;
@@ -485,15 +669,16 @@ a.overlay-close:hover {
 }
 
 #version {
-    color: #707070;
+    color: var(--primary-text-colour);
     font-size: 10px;
-    position: absolute;
-    bottom: 5px;
+    margin-top: -15px;
+    margin-bottom: 10px;
+    margin-left: 5px;
 }
 #donate {
     font-size: 14px;
-    margin: 5px 0;
-    padding: 10px;
+    margin: 5px 0 5px 0;
+    padding: 10px 10px 15px 10px;
     text-align: center;
 }
 
@@ -513,7 +698,7 @@ a.overlay-close:hover {
 }
 
 .tooltipster-badger-breakage-note.tooltipster-sidetip .tooltipster-box {
-    background-color: #F06A0A;
+    background-color: var(--primary-hover-colour);
     padding: 10px 0;
 }
 .tooltipster-badger-breakage-note.tooltipster-sidetip .tooltipster-content {
@@ -522,7 +707,7 @@ a.overlay-close:hover {
     font-size: 15px;
 }
 .tooltipster-badger-breakage-note.tooltipster-sidetip .tooltipster-arrow-background {
-    border-top-color: #F06A0A;
+    border-top-color: var(--primary-hover-colour);
     cursor: pointer;
 }
 
@@ -547,7 +732,7 @@ a.overlay-close:hover {
     width: 100%;
 }
 .toggle-header:hover {
-    border: 2px solid #f06a0a;
+    border: 2px solid var(--primary-hover-colour);
 }
 .toggle-header:hover .toggle-header-title {
     color: #56646C;
@@ -575,6 +760,17 @@ a.overlay-close:hover {
    margin-bottom: 2px;
    font-size: 18px;
    color: #F6C324 !important;
+}
+
+body#main #pbInstructions a,
+#firstparty-protections-container a,
+#cta-text,
+#pbInstructions,
+.toggle-header-title,
+#special-browser-page,
+#first-run-page,
+#disabled-site-message {
+    color: var(--primary-text-colour);
 }
 
 @media screen and (max-width: 400px){
@@ -622,6 +818,7 @@ a.overlay-close:hover {
     }
 }
 
+/*
 @media (prefers-color-scheme: dark) {
     :root {
         color-scheme: dark;
@@ -637,7 +834,6 @@ a.overlay-close:hover {
         color: #fff;
     }
 
-    /* popup only (not options page) */
     body#main, #instruction, .key {
         background-color: #333;
         color: #ddd;
@@ -651,7 +847,6 @@ a.overlay-close:hover {
     }
 
     button,
-    /* popup only (not options page) */
     body#main #pbInstructions a,
     #firstparty-protections-container a,
     #donate a,
@@ -675,11 +870,8 @@ a.overlay-close:hover {
         border-bottom: 1px solid #555;
     }
 
-    /* TODO:
-     *  - Add f06a0a color on hover
-     */
     #fittslaw, #help, #options, #share {
-        filter: invert(0.85);
+        filter: invert(0.85); 
     }
 
     #badger-title-div h2 {
@@ -720,4 +912,4 @@ a.overlay-close:hover {
     .userset .honeybadgerPowered {
         filter: invert(100%);
     }
-}
+} */
