@@ -32,6 +32,9 @@ body#main {
     overflow-y:scroll;
     max-height: 500px;
 }
+body#main.lock-scroll {
+    overflow-y: hidden;
+}
 
 html, body {
     padding: 0;
