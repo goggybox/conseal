@@ -28,7 +28,7 @@
         "description": "Heading for popup_special_page_paragraph"
     },
     "popup_special_page_paragraph": {
-        "message": "Privacy Badger doesn't work on special pages like this one. Try browsing somewhere else.",
+        "message": "Conseal doesn't work on special pages like this one. Try browsing somewhere else.",
         "description": "Shown in the popup for special browser pages such as the New Tab page and 'about:' pages."
     },
     "popup_first_run_header": {
@@ -264,7 +264,7 @@
         }
     },
     "share_base_message": {
-        "message": "Privacy Badger (privacybadger.org) is a browser extension that automatically learns to block hidden trackers. Privacy Badger is made by the Electronic Frontier Foundation, a nonprofit that fights for your rights online.",
+        "message": "Conseal (www.conse.al) is a browser extension that builds upon Privacy Badger (privacybadger.org) to provide protection against first-party fingerprinting.",
         "description": "The base message that is always included in the share message."
     },
     "copy_button_initial": {

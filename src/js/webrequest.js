@@ -1236,15 +1236,15 @@ function dispatcher(request, sender, sendResponse) {
 
     // CONSEAL CHANGES
 
-    case "getSecurityLevel": {
+    case "getProtectionLevel": {
       sendResponse(
-        badger.getSettings().getItem("securityLevel")
+        badger.getSettings().getItem("protectionLevel")
       );
       break;
     }
 
-    case "setSecurityLevel": {
-      badger.getSettings().setItem("securityLevel", request.level);
+    case "setProtectionLevel": {
+      badger.getSettings().setItem("protectionLevel", request.level);
       sendResponse();
     }
 

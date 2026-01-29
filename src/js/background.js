@@ -787,7 +787,7 @@ Badger.prototype = {
     showNonTrackingDomains: false,
     widgetReplacementExceptions: [],
     widgetSiteAllowlist: {},
-    securityLevel: 0,
+    protectionLevel: 0,   // <-- CONSEAL ADDITION
   },
 
   /**

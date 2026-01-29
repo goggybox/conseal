@@ -184,10 +184,138 @@ function showNagMaybe() {
   }
 }
 
+let protection_level = 2; // default protection level (if unknown) is 2 (HIGH)
+let protectionLevelContainer = document.getElementById("protection-level-container");
+
+/*
+ * function to update the protection level displayed in
+ * popup. does not affect stored value.
+ */
+function updateProtectionLevelDisplayed(new_level) {
+  console.log(`Loading protection level of ${new_level}`);
+  protection_level = new_level;
+
+  // update display text element
+  const textElem = document.getElementById("protection-level-text");
+  const txt = ["LOW PROTECTION", "MILD PROTECTION", "HIGH PROTECTION"];
+  textElem.textContent = txt[protection_level];
+
+  // update display circle element
+  const circleElem = document.getElementById("protection-level-circle");
+  const colours = ["var(--security-level-low-colour)", "var(--security-level-mild-colour)", "var(--security-level-high-colour)"];
+  circleElem.style.background = colours[protection_level];
+}
+
+/**
+ * function to set the protection level, saving it in browser
+ * storage. calls updateProtectionLevelDisplayed() to update display.
+ * new_level: int (0, 1, or 2 only)
+ */
+function setProtectionLevel(new_level) {
+  chrome.runtime.sendMessage({
+    type: 'setProtectionLevel',
+    level: new_level
+  });
+  updateProtectionLevelDisplayed(new_level);
+}
+
+/*
+ * function to open/close the protection level selector
+ * in the popup.
+ */
+function toggleProtectionLevelSelection() {
+  // the protection-level-container element will have class "selecting"
+  // when the selector is open, otherwise it will not.
+  // the protection-selector element will have class "hidden" when the
+  // selector is closed, otherwise it will not.
+  const protectionSelector = document.getElementById("protection-selector");
+
+  if (protectionLevelContainer.classList.contains("selecting")) {
+    // the selector is currently open - close it.
+    protectionLevelContainer.classList.remove("selecting");
+    protectionSelector.classList.add("hidden");
+  } else {
+    // the selector is currently closed - open it.
+    protectionLevelContainer.classList.add("selecting");
+    protectionSelector.classList.remove("hidden");
+
+    // determine which of the three levels should be displayed.
+    // (if LOW is currently selected, don't also display it in the dropdown)
+    const elems = [
+      document.getElementById("low-protection"),
+      document.getElementById("mild-protection"),
+      document.getElementById("high-protection")
+    ];
+    for (const elem of elems) {
+      // one of them may currently be hidden; remove hidden classes.
+      elem.classList.remove("hidden");
+    }
+    elems[protection_level].classList.add("hidden");
+  }
+}
+
 /**
  * Sets up event handlers. Should be called once only!
  */
 function init() {
+  
+  /* * * * * * * * * * * * * * * * * * * *
+   *           CONSEAL CHANGES           *
+   * * * * * * * * * * * * * * * * * * * */
+
+  // load the protection level from browser storage
+  chrome.runtime.sendMessage({
+    type: 'getProtectionLevel'
+  }, (response) => {
+    updateProtectionLevelDisplayed(response);
+  });
+
+  // add click event listener to the protection-level-container
+  protectionLevelContainer = document.getElementById("protection-level-container");
+  if (protectionLevelContainer) {
+    protectionLevelContainer.addEventListener("click", toggleProtectionLevelSelection);
+
+    // add click event to  check for clicks outside protection-level-container and/or
+    // outside protection-selector. If outside both, if the dropdown is
+    // open, close it.
+    const protectionSelector = document.getElementById("protection-selector");
+    if (protectionSelector) {
+      document.addEventListener('click', (event) => {
+        if (protectionLevelContainer.classList.contains("selecting")) {
+          const clickedInsidePLC = protectionLevelContainer.contains(event.target);
+          const clickedInsidePS = protectionSelector.contains(event.target);
+
+          if (!clickedInsidePLC && !clickedInsidePS) {
+            // clicked outside both; close the dropdown.
+            toggleProtectionLevelSelection();
+          }
+        }
+      });
+    }
+  }
+
+  // add click handlers to protection levels to change the protection level
+  const highProt = document.getElementById("high-protection");
+  const mildProt = document.getElementById("mild-protection");
+  const lowProt = document.getElementById("low-protection");
+
+  highProt.addEventListener("click", () => {
+    setProtectionLevel(2);
+    toggleProtectionLevelSelection();
+  });
+  mildProt.addEventListener("click", () => {
+    setProtectionLevel(1);
+    toggleProtectionLevelSelection();
+  });
+  lowProt.addEventListener("click", () => {
+    setProtectionLevel(0);
+    toggleProtectionLevelSelection();
+  });
+  
+  /* * * * * * * * * * * * * * * * * * * *
+   *         END CONSEAL CHANGES         *
+   * * * * * * * * * * * * * * * * * * * */
+
   showNagMaybe();
 
   if (POPUP_DATA.isAndroid) {
@@ -640,7 +768,7 @@ function refreshPopup() {
     return;
   }
 
-  // revert any hiding/showing above for cases when refreshPopup gets called
+  // revert any hiding/showing above for cases when refreshPopup   called
   // more than once for the same popup, such as during functional testing
   $('#blockedResourcesContainer').show();
   $('#special-browser-page').hide();

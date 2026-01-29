@@ -1,0 +1,81 @@
+@media (prefers-color-scheme: light) {
+    :root {
+        /* background colours */
+        --primary-header-background: #e4eff5;
+        --primary-footer-background: #e4eff5;
+        --primary-background-colour: var(--privacy-badger-background-colour);
+        --privacy-badger-background-colour: #7A8F9A;
+        --conseal-background-colour: #fefefe;
+
+        /* text colours */
+        --primary-text-colour: #56646C;
+        --secondary-text-colour: #707070;
+        --version-text-colour: #858585;
+
+        /* border colours */
+        --primary-border-colour: #56646C;
+        --focus-border-colour: var(--primary-focus-colour);
+
+        /* button colours */
+        --primary-button-background-colour: #f0f8fc;
+        --primary-button-border-colour: var(--primary-border-colour);
+
+        /* security level colours */
+        --security-level-low-colour: #fe8888;
+        --security-level-mild-colour: #febd88;
+        --security-level-high-colour: #66e02a;
+
+        /* icon colours */
+        --heart-icon-colour: #fe8888;
+
+        /* textarea input box colour */
+        --primary-textarea-background-colour: var(--primary-button-background-colour);
+        --primary-textarea-border-colour: var(--primary-border-colour);
+
+        /* focus colour */
+        --primary-focus-colour: #c49cbf;
+
+        /* hover colour */
+        --primary-hover-colour: var(--primary-focus-colour);
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* background colours */
+        --primary-header-background: #7A8F9A;
+        --primary-footer-background: #7A8F9A;
+        --primary-background-colour: #3f474b;
+
+        /* text colours */
+        --primary-text-colour: #c5d2d9;
+        --secondary-text-colour: #b7c1c6;
+        --version-text-colour: #858585;
+
+        /* border colours */
+        --primary-border-colour: #556065;
+        --focus-border-colour: var(--primary-focus-colour);
+
+        /* button colours */
+        --primary-button-background-colour: #4b5459;
+        --primary-button-border-colour: var(--primary-border-colour);
+
+        /* security level colours */
+        --security-level-low-colour: #fe8888;
+        --security-level-mild-colour: #febd88;
+        --security-level-high-colour: #affe88;
+
+        /* icon colours */
+        --heart-icon-colour: #fe8888;
+
+        /* textarea input box colour */
+        --primary-textarea-background-colour: var(--primary-button-background-colour);
+        --primary-textarea-border-colour: var(--primary-border-colour);
+
+        /* focus colour */
+        --primary-focus-colour: #886784;
+
+        /* hover colour */
+        --primary-hover-colour: var(--primary-focus-colour);
+    }
+}
