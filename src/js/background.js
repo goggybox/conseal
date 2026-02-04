@@ -30,6 +30,8 @@ import utils from "./utils.js";
 
 // ---------- CONSEAL CHANGES ----------
 import conseal from "./conseal/controller.js";
+
+const CONSEAL_SITE_STATS_KEY = "conseal_site_stats";
 // ----------   END CHANGES   ----------
 
 /**

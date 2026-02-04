@@ -80,20 +80,31 @@ html {
     margin: -7px -12px;
     margin-top: -45px;
     padding: 10px;
+    text-align: center;
 }
 #conseal-flexbox.disabled {
     display: none;
 }
+#conseal-flexbox * {
+    text-align: center;
+}
 
 #conseal-content-header {
-    padding-bottom: 10px;
+    padding-top: 30px;
     display: flex;
-    gap: 0px;
-    place-items: center;
+    gap: 10px;
+    width: fit-content;
+    margin: 0 auto;
 }
 #conseal-content-header h2 {
-    font-family: "Antipasto";
-    font-size: 22px;
+    font-family: "Manjari";
+    font-size: 18px;
+    font-weight: 1000;
+    width: 100%;
+}
+
+.conseal_disabled_icon, .conseal_enabled_icon {
+    padding-bottom: 5px;
 }
 
 #seal-icon {
@@ -103,6 +114,7 @@ html {
 
 #conseal-content {
     min-height: 400px;
+    font-size: 14px;
 }
 
 #protection-level-container {
@@ -283,7 +295,7 @@ body#main {
 @font-face {
     font-family: "Manjari";
     src: url("./fonts/Manjari-Regular.ttf") format("truetype");
-    font-weight: 400;
+    font-weight: 5  00;
     font-style: normal;
     font-display: swap;
 }
@@ -291,7 +303,7 @@ body#main {
 @font-face {
     font-family: "Manjari";
     src: url("./fonts/Manjari-Bold.ttf") format("truetype");
-    font-weight: 700;
+    font-weight: 1000;
     font-style: normal;
     font-display: swap;
 }

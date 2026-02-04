@@ -5,6 +5,19 @@
 
 (function () {
     console.log("[CONSEAL][audio] scrambler loaded", location.href);
+
+    function reportAttempt() {
+        try {
+            chrome.runtime.sendMessage({
+                type: 'recordConsealTrackingAttempt',
+                method: 'audiocontext',
+                url: location.href
+            });
+        } catch (e) {
+            // silently fail
+        }
+    }
+
     function createCustomChannelData(target) {
         if (!target || !target.prototype?.getChannelData) return;
 
@@ -12,6 +25,7 @@
         let buffer = null;
 
         function getChannelData() {
+            reportAttempt();
             const originalResult = original.apply(this, arguments);
             if (buffer !== originalResult) {
                 buffer = originalResult;
@@ -31,6 +45,7 @@
         if (!target || !target.prototype?.getFloatFrequencyData) return;
         const original = target.prototype.getFloatFrequencyData;
         function getFloatFrequencyData() {
+            reportAttempt();
             const result = original.apply(this, arguments);
             const data = arguments[0];
             for (let i = 0; i < data.length; i += 100) {

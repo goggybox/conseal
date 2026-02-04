@@ -1,5 +1,6 @@
 import { log } from "../bootstrap.js";
 import audioDefense from "./defenses/audio/injector.js";
+import statsStorage from "./statsController.js";
 
 let badger;
 
@@ -72,11 +73,18 @@ function setProtectionLevel(new_level) {
     return badger.getSettings().setItem("protectionLevel", new_level);
 }
 
+function recordTrackingAttempt(method, url) {
+    const urlObj = new URL(url);
+    const site = urlObj.hostname;
+
+    statsStorage.recordAttempt(badger, site, method);
+}
 
 export default {
     init,
     injectOnPageLoad,
     handle,
     getProtectionLevel,
-    setProtectionLevel
+    setProtectionLevel,
+    recordTrackingAttempt
 };

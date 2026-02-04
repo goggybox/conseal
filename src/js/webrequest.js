@@ -1240,6 +1240,9 @@ function dispatcher(request, sender, sendResponse) {
       "unblockWidget",
       "widgetFromSurrogate",
       "widgetReplacementReady",
+      "recordConsealTrackingAttempt",
+      "getConsealSiteStats",
+      "setConsealSiteStats"
     ];
     if (KNOWN_CONTENT_SCRIPT_MESSAGES.includes(request.type)) {
       if (!sender.tab) {
@@ -1261,7 +1264,7 @@ function dispatcher(request, sender, sendResponse) {
 
   switch (request.type) {
 
-    // CONSEAL CHANGES
+    // ---------- CONSEAL CHANGES ----------
 
     case "getProtectionLevel": {
       sendResponse(
@@ -1283,7 +1286,29 @@ function dispatcher(request, sender, sendResponse) {
       break;
     }
 
-    // END CONSEAL CHANGES
+    case "getConsealSiteStats": {
+      sendResponse(
+        badger.getSettings().getItem("consealSiteStats")
+      );
+      break;
+    }
+
+    case "setConsealSiteStats": {
+      badger.getSettings().setItem("consealSiteStats", request.data);
+      sendResponse();
+      break;
+    }
+
+    case "recordConsealTrackingAttempt": {
+      conseal.recordTrackingAttempt(
+        request.method,
+        request.url
+      );
+      sendResponse();
+      break;
+    }
+
+    // ----------   END CHANGES   ----------
 
   case "checkEnabled": {
     sendResponse(badger.isPrivacyBadgerEnabled(

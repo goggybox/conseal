@@ -315,6 +315,21 @@ function init() {
     setProtectionLevel(0);
     toggleProtectionLevelSelection();
   });
+
+  // HANDLE TEXT
+  function handleText() {
+    const elements = document.querySelectorAll('[data-i18n');
+
+    elements.forEach(element => {
+      const messageKey = element.getAttribute('data-i18n');
+      
+      const message = chrome.i18n.getMessage(messageKey);
+      element.textContent = message;
+    })
+  }
+  $(function() {
+    handleText();
+  })
   
   /* * * * * * * * * * * * * * * * * * * *
    *         END CONSEAL CHANGES         *
@@ -775,6 +790,17 @@ function refreshPopup() {
     } else {
       // show the "nothing to do here" message
       $('#special-browser-page').show();
+      
+      /* ---------- CONSEAL CHANGES ---------- */
+      // conseal will also be disabled on pages like this.
+      $('#i18n_conseal_disabled_header').show();
+      $('#i18n_conseal_enabled_header').hide();
+      $('#i18n_conseal_disabled_desc').show();
+      $('#i18n_conseal_enabled_desc').hide();
+      $('.conseal_disabled_icon').show();
+      $('.conseal_enabled_icon').hide();
+
+      /* ----------   END CHANGES   ---------- */
 
       // hide inapplicable Disable/Report buttons
       $('#deactivate_site_btn').hide();
@@ -795,6 +821,17 @@ function refreshPopup() {
   $('#special-browser-page').hide();
   $('#deactivate_site_btn').show();
   $('#error').show();
+
+  /* ---------- CONSEAL CHANGES ---------- */
+  $('#i18n_conseal_disabled_header').hide();
+  $('#i18n_conseal_enabled_header').show();
+  $('#i18n_conseal_disabled_desc').hide();
+  $('#i18n_conseal_enabled_desc').show();
+  $('.conseal_disabled_icon').hide();
+  $('.conseal_enabled_icon').show();
+  console.log("ENABLED FOR THIS PAGE");
+
+  /* ----------   END CHANGES   ---------- */
 
   // toggle activation buttons if privacy badger is not enabled for current url
   if (!POPUP_DATA.enabled) {
