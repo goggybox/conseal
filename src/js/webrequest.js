@@ -60,7 +60,7 @@ function onBeforeRequest(details) {
   if (type == "main_frame") {
     // ---------- CONSEAL CHANGES ----------
     // this runs once per page load. inject defense scripts into page
-    // conseal.injectOnPageLoad(tab_id, frame_id, url);
+    conseal.injectOnPageLoad(tab_id, frame_id, url);
     // ----------   END CHANGES   ----------
     let oldTabData = badger.tabData.getFrameData(tab_id),
       is_reload = oldTabData && oldTabData.url == url;

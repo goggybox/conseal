@@ -1,17 +1,12 @@
 import { log } from "../../../bootstrap.js";
 
-const injectedTabs = new Set();
-
 /**
- * inject audio defenses into a tab ONLY ONCE.
+ * inject audio defenses into the page
  * @param {*} ctx 
  */
 async function inject(ctx) {
     console.log("CONSEAL: Injecting AudioContext defense into page...");
     const { tabId, frameId } = ctx;
-
-    const key = `${tabId}:${frameId}`;
-    if (injectedTabs.has(key)) return;
 
     try {
         await browser.tabs.executeScript(tabId, {
@@ -20,10 +15,9 @@ async function inject(ctx) {
             runAt: "document_start"
         });
 
-        console.log(`CONSEAL: AudioContext defense injected (${key})`);
-        injectedTabs.add(key);
+        console.log(`CONSEAL: AudioContext defense injected. `);
     } catch (e) {
-        console.error(`CONSEAL: AudioContext defense injection failed (${key})`, e);
+        console.error(`CONSEAL: AudioContext defense injection failed. `, e);
     }
 }
 
