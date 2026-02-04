@@ -1,11 +1,39 @@
 import { log } from "../bootstrap.js";
+import audioDefense from "./defenses/audio/injector.js";
 
 let badger;
 
 function init(data) {
-    log("CONSEAL: Initialised Conseal");
     badger = data["badger"];
+    console.log("CONSEAL: Initialised Conseal");
+
+    browser.webNavigation.onCommitted.addListener(
+        injectOnPageLoad,
+        { url: [{ schemes: ["http", "https"] }] }
+    );
 };
+
+function injectOnPageLoad(details) {
+    const { tabId, frameId, url } = details;
+    if (frameId !== 0) { return; }
+
+    const level = getProtectionLevel();
+    if (!level || level === 0) {
+        console.log(`CONSEAL: No first-party defenses for ${url}`);
+        return;
+    }
+
+    const ctx = { tabId, frameId, url };
+    
+    if (level === 2) {
+        // HIGH LEVEL defenses:
+        //      - AudioContext (handled here)
+        audioDefense.inject(ctx);
+    }
+    else if (level === 1) {
+        // MILD LEVEL defenses
+    }
+}
 
 /**
  * function to handle first-party requests
@@ -15,8 +43,21 @@ function init(data) {
 function handle(ctx) {
     if (!badger) { return; }
 
-    console.log("HANDLING FIRST-PARTY REQUEST");
+    const level = getProtectionLevel();
 
+    if (level == 2) {
+        // HIGH LEVEL defenses:
+        //      - AudioContext (handled by injectOnPageLoad)
+
+    }
+    else if (level == 1) {
+        // MILD LEVEL defenses
+
+    }
+    else {
+        // NO FIRST-PARTY DEFENSES ENABLED
+        return;
+    }
 }
 
 
@@ -34,6 +75,7 @@ function setProtectionLevel(new_level) {
 
 export default {
     init,
+    injectOnPageLoad,
     handle,
     getProtectionLevel,
     setProtectionLevel

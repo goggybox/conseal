@@ -76,6 +76,7 @@ function Badger(from_qunit) {
     startBackgroundListeners();
   }
 
+
   /**
    * Callback that continues Privacy Badger initialization
    * once Badger storage is ready.
@@ -240,6 +241,18 @@ Badger.prototype = {
     }
 
     if (chrome.privacy.websites) {
+
+      // ---------- CONSEAL CHANGES ----------
+
+      // set resistFingerprinting if in High protection level
+      _set_override(
+        "resistFingerprinting",
+        chrome.privacy.websites.resistFingerprinting,
+        (self.getSettings().getItem("protectionLevel") == 2)
+      );
+
+      // ----------   END CHANGES   ----------
+
       _set_override(
         "hyperlinkAuditingEnabled",
         chrome.privacy.websites.hyperlinkAuditingEnabled,
@@ -798,7 +811,7 @@ Badger.prototype = {
     showNonTrackingDomains: false,
     widgetReplacementExceptions: [],
     widgetSiteAllowlist: {},
-    protectionLevel: 0,   // <-- CONSEAL ADDITION
+    protectionLevel: 2,   // <-- CONSEAL ADDITION
   },
 
   /**
@@ -975,6 +988,7 @@ Badger.prototype = {
     });
   },
 
+  
   /**
    * Shortcut helper for user-facing settings
    */

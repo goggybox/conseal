@@ -58,6 +58,10 @@ function onBeforeRequest(details) {
     from_current_tab = true;
 
   if (type == "main_frame") {
+    // ---------- CONSEAL CHANGES ----------
+    // this runs once per page load. inject defense scripts into page
+    // conseal.injectOnPageLoad(tab_id, frame_id, url);
+    // ----------   END CHANGES   ----------
     let oldTabData = badger.tabData.getFrameData(tab_id),
       is_reload = oldTabData && oldTabData.url == url;
     forgetTab(tab_id, is_reload);
@@ -1268,7 +1272,15 @@ function dispatcher(request, sender, sendResponse) {
 
     case "setProtectionLevel": {
       conseal.setProtectionLevel(request.level)
+      badger.setPrivacyOverrides();
       sendResponse();
+      break;
+    }
+
+    case "setResistFingerprinting": {
+      badger.setResistFingerprinting(request.bool);
+      sendResponse();
+      break;
     }
 
     // END CONSEAL CHANGES

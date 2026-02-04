@@ -28,7 +28,7 @@
         "description": "Heading for popup_special_page_paragraph"
     },
     "popup_special_page_paragraph": {
-        "message": "Conseal doesn't work on special pages like this one. Try browsing somewhere else.",
+        "message": "Privacy Badger doesn't work on special pages like this one. Try browsing somewhere else.",
         "description": "Shown in the popup for special browser pages such as the New Tab page and 'about:' pages."
     },
     "popup_first_run_header": {
@@ -739,15 +739,15 @@
         "description": "Pop-up triggered when the remove_all_data button is clicked"
     },
     "intro_text1": {
-        "message": "You're now protected by Privacy Badger.",
+        "message": "You're now protected by Conseal!",
         "description": "First part of a reminder to visit the intro page. Shown in popup until the user clicks on the reminder link or browses through the intro page."
     },
     "intro_text2": {
-        "message": "To learn how Privacy Badger works, click below for a quick tutorial.",
+        "message": "To learn how Conseal works, click below for a quick tutorial.",
         "description": "Second part of a reminder to visit the intro page"
     },
     "first_run_text": {
-        "message": "Learn how Privacy Badger protects your privacy",
+        "message": "Learn how Conseal protects your privacy",
         "description": "Part of a reminder to visit the intro page. Shown in popup until the user clicks on the reminder link or browses through the intro page."
     },
     "learning_prompt_text1": {
