@@ -38,6 +38,10 @@
 
         /* hover colour */
         --primary-hover-colour: var(--primary-focus-colour);
+
+        /* extension badge colours */
+        --badge-background-colour: #fd6565;
+        --badge-text-colour: #fff;
     }
 }
 
@@ -79,5 +83,9 @@
 
         /* hover colour */
         --primary-hover-colour: var(--primary-focus-colour);
+
+        /* extension badge colours */
+        --badge-background-colour: #fd6565;
+        --badge-text-colour: #fff;
     }
 }

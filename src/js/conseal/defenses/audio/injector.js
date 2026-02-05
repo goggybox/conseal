@@ -9,13 +9,23 @@ async function inject(ctx) {
     const { tabId, frameId } = ctx;
 
     try {
+        // expose tabId to page context.
+        await browser.tabs.executeScript(tabId, {
+            code: `
+                window.__CONSEAL_TAB_ID__ = ${tabId};
+            `,
+            frameId,
+            runAt: "document_start"
+        });
+
+        // inject scrambler
         await browser.tabs.executeScript(tabId, {
             file: "js/conseal/defenses/audio/scrambler.js",
             frameId,
             runAt: "document_start"
         });
 
-        console.log(`CONSEAL: AudioContext defense injected. `);
+        console.log(`CONSEAL: AudioContext defense injected.`);
     } catch (e) {
         console.error(`CONSEAL: AudioContext defense injection failed. `, e);
     }

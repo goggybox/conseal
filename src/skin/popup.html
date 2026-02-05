@@ -145,21 +145,43 @@
   <div id="conseal-flexbox">
     <div id="conseal-content-header">
       <!-- Enabled/Disabled icon -->
-      <img class="conseal_disabled_icon" src="/icons/UI-icons-red.svg"/>
-      <img class="conseal_enabled_icon" src="/icons/UI-icons-green.svg"/>
+      <div class="conseal-header-icon-container">
+        <img class="conseal_disabled_icon" src="/icons/UI-icons-red.svg"/>
+        <img class="conseal_enabled_icon" src="/icons/UI-icons-green.svg"/>
+      </div>
 
       <!-- Header text, such as "Conseal is disabled for this page" -->
-      <h2 data-i18n="conseal_enabled_header" id="i18n_conseal_enabled_header"></h2>
-      <h2 data-i18n="conseal_disabled_header" id="i18n_conseal_disabled_header"></h2>
+      <div class="conseal-header-title-container">
+        <h2 data-i18n="conseal_enabled_header" id="i18n_conseal_enabled_header"></h2>
+        <h2 data-i18n="conseal_disabled_header" id="i18n_conseal_disabled_header"></h2>
+      </div>
 
       <!-- Enabled/Disabled icon -->
-      <img class="conseal_disabled_icon" src="/icons/UI-icons-red.svg"/>
-      <img class="conseal_enabled_icon" src="/icons/UI-icons-green.svg"/>
+      <div class="conseal-header-icon-container">
+        <img class="conseal_disabled_icon" src="/icons/UI-icons-red.svg"/>
+        <img class="conseal_enabled_icon" src="/icons/UI-icons-green.svg"/>
+      </div>
     </div>
     <div id="conseal-content">
       <!-- Explanation of header -->
       <p data-i18n="conseal_enabled_desc" id="i18n_conseal_enabled_desc"></p>
       <p data-i18n="conseal_disabled_desc" id="i18n_conseal_disabled_desc"></p>
+
+      <div id="conseal-protections-container">
+        <!-- Show no attempts desc if no tracking attempts have been blocked -->
+         <p data-i18n="conseal_no_attempts_blocked_desc" id="i18n_conseal_no_attempts_blocked_desc"></p>
+
+        <!-- Show protections button if tracking attempts have been blocked -->
+        <div id="conseal-blocked-attempts-container">
+          <div id="conseal-protections-button">
+              <p> <span id="conseal-attempts-blocked"></span> potential tracking attempts blocked.</p>
+              <div id="toggle-conseal-attempts">
+                <div id="toggle-conseal-attempts-expand" class="ui-icon ui-icon-caret-d"></div>
+                <div id="toggle-conseal-attempts-collapse" class="ui-icon ui-icon-caret-u hidden"></div>
+              </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 

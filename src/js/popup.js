@@ -192,7 +192,6 @@ let protectionLevelContainer = document.getElementById("protection-level-contain
  * popup. does not affect stored value.
  */
 function updateProtectionLevelDisplayed(new_level) {
-  console.log(`Loading protection level of ${new_level}`);
   protection_level = new_level;
 
   // update display text element
@@ -266,6 +265,22 @@ function init() {
   /* * * * * * * * * * * * * * * * * * * *
    *           CONSEAL CHANGES           *
    * * * * * * * * * * * * * * * * * * * */
+
+  //UPDATE SESSION STATS
+  getTab(async function(tab) {
+    if (!tab || !tab.id) {
+      console.log("No active tab found");
+      return;
+    }
+
+    // send message to get stats for this tab
+    await chrome.runtime.sendMessage({
+      type: "getConsealSessionStats",
+      tabId: tab.id
+    }, function(stats) {
+      updateSessionStats(stats, tab.id);
+    });
+  });
 
   // load the protection level from browser storage
   chrome.runtime.sendMessage({
@@ -446,6 +461,36 @@ function init() {
   $('#cta-icon').addClass(link.icon);
 
   window.POPUP_INITIALIZED = true;
+}
+
+
+/**
+ * update the popup to disable the tracking attempts
+ * that have been blocked for the current tab.
+ * @param {*} stats type: {
+ *                    url,
+ *                    startedAt,
+ *                    total,
+ *                    methods {
+ *                      "audiocontext": 1,
+ *                      ...
+ *                    }
+ * @param {*} tabId 
+ */
+function updateSessionStats(stats, tabId) {
+  if (!stats || stats.total === 0) {
+    // no tracking attempts were detected. show the description to explain
+    $('#i18n_conseal_no_attempts_blocked_desc').show();
+    // hide the container that shows blocked attempts
+    $('#conseal-blocked-attempts-container').hide();
+  } else {
+    // show the container and hide no attempts description
+    $('#i18n_conseal_no_attempts_blocked_desc').hide();
+    $('#conseal-blocked-attempts-container').show();
+
+    // show number of attempts made
+    $('#conseal-attempts-blocked').text(`${stats.total}`);
+  }
 }
 
 function openPage(url) {
@@ -792,6 +837,9 @@ function refreshPopup() {
       $('#special-browser-page').show();
       
       /* ---------- CONSEAL CHANGES ---------- */
+      // this code runs when on a page where conseal&privacy badger
+      // are disabled (special pages such as about:config).
+
       // conseal will also be disabled on pages like this.
       $('#i18n_conseal_disabled_header').show();
       $('#i18n_conseal_enabled_header').hide();
@@ -799,6 +847,9 @@ function refreshPopup() {
       $('#i18n_conseal_enabled_desc').hide();
       $('.conseal_disabled_icon').show();
       $('.conseal_enabled_icon').hide();
+
+      // hide protections container
+      $('#conseal-protections-container').hide();
 
       /* ----------   END CHANGES   ---------- */
 
@@ -823,13 +874,24 @@ function refreshPopup() {
   $('#error').show();
 
   /* ---------- CONSEAL CHANGES ---------- */
+  // this code runs when on a page where conseal&privacy badger
+  // are enabled.
+
   $('#i18n_conseal_disabled_header').hide();
   $('#i18n_conseal_enabled_header').show();
   $('#i18n_conseal_disabled_desc').hide();
   $('#i18n_conseal_enabled_desc').show();
   $('.conseal_disabled_icon').hide();
   $('.conseal_enabled_icon').show();
-  console.log("ENABLED FOR THIS PAGE");
+  
+  // show protections container
+  $('#conseal-protections-container').show();
+  
+  // refresh session tracking stats shown in popup
+  chrome.runtime.sendMessage({
+    type: "updatePopupSessionStats",
+    tabId: POPUP_DATA.tabId
+  });
 
   /* ----------   END CHANGES   ---------- */
 

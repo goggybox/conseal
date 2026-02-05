@@ -4,14 +4,35 @@ import statsStorage from "./statsController.js";
 
 let badger;
 
+/**
+ * entries keyed by tabId:
+ * {
+ *   url,
+ *   startedAt,
+ *   total,
+ *   methods {
+ *     "audiocontext": 1,
+ *     ...
+ *   }
+ * }
+ *      
+ */
+let sessionAttempts = new Map();
+
 function init(data) {
     badger = data["badger"];
     console.log("CONSEAL: Initialised Conseal");
 
+    // run injectOnPageLoad when page load event fires
     browser.webNavigation.onCommitted.addListener(
         injectOnPageLoad,
         { url: [{ schemes: ["http", "https"] }] }
     );
+
+    // clean up sessionAttempts when a tab closes
+    browser.tabs.onRemoved.addListener((tabId) => {
+        sessionAttempts.delete(tabId);
+    });
 };
 
 function injectOnPageLoad(details) {
@@ -20,12 +41,20 @@ function injectOnPageLoad(details) {
 
     const level = getProtectionLevel();
     if (!level || level === 0) {
-        console.log(`CONSEAL: No first-party defenses for ${url}`);
         return;
     }
 
     const ctx = { tabId, frameId, url };
-    
+
+    // ----- TRACK ATTEMPTS -----
+    sessionAttempts.set(tabId, {
+        url,
+        startedAt: Date.now(),
+        total: 0,
+        methods: {}
+    });
+
+    // ----- INJECT DEFENSES -----
     if (level === 2) {
         // HIGH LEVEL defenses:
         //      - AudioContext (handled here)
@@ -61,6 +90,36 @@ function handle(ctx) {
     }
 }
 
+function recordTrackingAttempt(method, url, tabId) {
+    const urlObj = new URL(url);
+    const site = urlObj.hostname;
+
+    statsStorage.recordAttempt(badger, site, method);
+
+    // update tracking attempts for current session
+    //      - volatile, only for session lifetime
+    const session = sessionAttempts.get(tabId);
+    if (!session) {
+        return; 
+    }
+    session.total += 1;
+    session.methods[method] = (session.methods[method] || 0) + 1;
+
+    // update extension badge counter
+    updateBadgeCounter(tabId, session.total);
+}
+
+function updateBadgeCounter(tabId, num) {
+    const root = document.documentElement;
+    const backrgoundColour = getComputedStyle(root).getPropertyValue('--badge-background-colour').trim();
+    const textColour = getComputedStyle(root).getPropertyValue('--badge-text-colour').trim();
+    chrome.browserAction.setBadgeBackgroundColor({tabId: tabId, color: backrgoundColour});
+    chrome.browserAction.setBadgeTextColor({ tabId: tabId, color: textColour });
+    chrome.browserAction.setBadgeText({ tabId: tabId, text: num.toString() + "" });
+
+}
+
+// ---------- GETTERS AND SETTERS ----------
 
 /**
  * get protection level from Badger storage
@@ -73,11 +132,12 @@ function setProtectionLevel(new_level) {
     return badger.getSettings().setItem("protectionLevel", new_level);
 }
 
-function recordTrackingAttempt(method, url) {
-    const urlObj = new URL(url);
-    const site = urlObj.hostname;
+function getSessionAttempts(tabId) {
+    return sessionAttempts.get(tabId) || null;
+}
 
-    statsStorage.recordAttempt(badger, site, method);
+function getAllSessionAttempts() {
+    return Array.from(sessionAttempts.entries());
 }
 
 export default {
@@ -86,5 +146,7 @@ export default {
     handle,
     getProtectionLevel,
     setProtectionLevel,
-    recordTrackingAttempt
+    recordTrackingAttempt,
+    getSessionAttempts,
+    getAllSessionAttempts
 };

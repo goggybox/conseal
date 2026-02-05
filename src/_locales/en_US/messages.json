@@ -8,13 +8,18 @@
         "description": ""
     },
     "conseal_enabled_desc": {
-        "message": "Conseal is working hard to protect you from first-party trackers.",
+        "message": "Conseal is working hard to protect you from trackers.",
         "description": ""
     },
     "conseal_disabled_desc": {
         "message": "Conseal doesn't work on special pages like this. Try browsing somewhere else.",
         "description": ""
     },
+    "conseal_no_attempts_blocked_desc": {
+        "message": "No tracking attempts have been detected.",
+        "description": ""
+    },
+
     "name": {
         "message": "Conseal",
         "description": "The name of this extension."

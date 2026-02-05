@@ -11,7 +11,8 @@
             chrome.runtime.sendMessage({
                 type: 'recordConsealTrackingAttempt',
                 method: 'audiocontext',
-                url: location.href
+                url: location.href,
+                tabId: window.__CONSEAL_TAB_ID__
             });
         } catch (e) {
             // silently fail

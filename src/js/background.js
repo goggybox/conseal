@@ -958,33 +958,33 @@ Badger.prototype = {
         return;
       }
 
-      if (self.criticalError) {
-        chrome.browserAction.setBadgeBackgroundColor({tabId: tab_id, color: "#cc0000"});
-        chrome.browserAction.setBadgeText({tabId: tab_id, text: "!"});
-        return;
-      }
+      // if (self.criticalError) {
+      //   chrome.browserAction.setBadgeBackgroundColor({tabId: tab_id, color: "#cc0000"});
+      //   chrome.browserAction.setBadgeText({tabId: tab_id, text: "!"});
+      //   return;
+      // }
 
-      // don't show the counter for any of these:
-      // - the counter is disabled
-      // - we don't have tabData for whatever reason (special browser pages)
-      // - Privacy Badger is disabled on the page
-      if (!self.tabData.has(tab_id) ||
-        !self.getSettings().getItem("showCounter") ||
-        !self.isPrivacyBadgerEnabled(self.tabData.getFrameData(tab_id).host)
-      ) {
-        chrome.browserAction.setBadgeText({tabId: tab_id, text: ""});
-        return;
-      }
+      // // don't show the counter for any of these:
+      // // - the counter is disabled
+      // // - we don't have tabData for whatever reason (special browser pages)
+      // // - Privacy Badger is disabled on the page
+      // if (!self.tabData.has(tab_id) ||
+      //   !self.getSettings().getItem("showCounter") ||
+      //   !self.isPrivacyBadgerEnabled(self.tabData.getFrameData(tab_id).host)
+      // ) {
+      //   chrome.browserAction.setBadgeText({tabId: tab_id, text: ""});
+      //   return;
+      // }
 
-      let count = self.getTrackerCount(tab_id);
+      // let count = self.getTrackerCount(tab_id);
 
-      if (count === 0) {
-        chrome.browserAction.setBadgeText({tabId: tab_id, text: ""});
-        return;
-      }
+      // if (count === 0) {
+      //   chrome.browserAction.setBadgeText({tabId: tab_id, text: ""});
+      //   return;
+      // }
 
-      chrome.browserAction.setBadgeBackgroundColor({tabId: tab_id, color: "#ec9329"});
-      chrome.browserAction.setBadgeText({tabId: tab_id, text: count + ""});
+      // chrome.browserAction.setBadgeBackgroundColor({tabId: tab_id, color: "#ec9329"});
+      // chrome.browserAction.setBadgeText({tabId: tab_id, text: count + ""});
     });
   },
 

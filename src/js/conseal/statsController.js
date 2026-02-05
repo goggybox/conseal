@@ -64,10 +64,7 @@ async function recordAttempt(badger, site, method) {
 
     // store changes
     data[site].lastUpdated = now;
-    console.log("STORING SITE STATS....");
     badger.getSettings().setItem("consealSiteStats", data);
-    const test = badger.getSettings().getItem("consealSiteStats");
-    console.log(test);
 }
 
 /**

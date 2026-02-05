@@ -1266,6 +1266,7 @@ function dispatcher(request, sender, sendResponse) {
 
     // ---------- CONSEAL CHANGES ----------
 
+    // get the selected protection level from browser storage
     case "getProtectionLevel": {
       sendResponse(
         conseal.getProtectionLevel()
@@ -1273,6 +1274,7 @@ function dispatcher(request, sender, sendResponse) {
       break;
     }
 
+    // update selected protection level in browser storage
     case "setProtectionLevel": {
       conseal.setProtectionLevel(request.level)
       badger.setPrivacyOverrides();
@@ -1280,12 +1282,14 @@ function dispatcher(request, sender, sendResponse) {
       break;
     }
 
+    // enable/disable Firefox's "resistFingerprinting" setting
     case "setResistFingerprinting": {
       badger.setResistFingerprinting(request.bool);
       sendResponse();
       break;
     }
 
+    // get the consealSiteStats map from browser storage
     case "getConsealSiteStats": {
       sendResponse(
         badger.getSettings().getItem("consealSiteStats")
@@ -1293,19 +1297,29 @@ function dispatcher(request, sender, sendResponse) {
       break;
     }
 
+    // set the consealSiteStats map in browser storage
     case "setConsealSiteStats": {
       badger.getSettings().setItem("consealSiteStats", request.data);
       sendResponse();
       break;
     }
 
+    // record a new tracking attempt by a given url
     case "recordConsealTrackingAttempt": {
       conseal.recordTrackingAttempt(
         request.method,
-        request.url
+        request.url,
+        request.tabId
       );
       sendResponse();
       break;
+    }
+
+    // update the session tracking stats displayed in popup when popup refreshes
+    case "getConsealSessionStats": {
+      const stats = conseal.getSessionAttempts(request.tabId);
+      sendResponse(stats);
+      return true;
     }
 
     // ----------   END CHANGES   ----------
