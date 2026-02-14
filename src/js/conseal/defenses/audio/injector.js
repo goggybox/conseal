@@ -1,4 +1,3 @@
-import { log } from "../../../bootstrap.js";
 
 /**
  * inject audio defenses into the page
