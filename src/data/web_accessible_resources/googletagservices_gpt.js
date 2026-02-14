@@ -1,3 +1,12 @@
+
+// --------------------------------------------------------------------
+// This file is part of Conseal <https://conse.al/>.
+// Copyright (C) 2026 goggybox <https://github.com/goggybox>
+// Copyright (C) 2014 Electronic Frontier Foundation <https://www.eff.org/>
+
+// Please keep this header comment in all copies of the program.
+// --------------------------------------------------------------------
+
 // https://github.com/gorhill/uBlock/blob/5a9cd724ca47c3a0577decbab053b9d8b05a3b1b/src/web_accessible_resources/googletagservices_gpt.js + nytimes.com getTargeting() fix
 (function() {
     'use strict';

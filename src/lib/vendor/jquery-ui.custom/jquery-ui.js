@@ -1,3 +1,12 @@
+
+// --------------------------------------------------------------------
+// This file is part of Conseal <https://conse.al/>.
+// Copyright (C) 2026 goggybox <https://github.com/goggybox>
+// Copyright (C) 2014 Electronic Frontier Foundation <https://www.eff.org/>
+
+// Please keep this header comment in all copies of the program.
+// --------------------------------------------------------------------
+
 /*! jQuery UI - v1.13.2 - 2022-09-23
 * http://jqueryui.com
 * Includes: widget.js, form-reset-mixin.js, keycode.js, labels.js, unique-id.js, widgets/button.js, widgets/checkboxradio.js, widgets/controlgroup.js, widgets/tabs.js

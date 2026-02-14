@@ -1,3 +1,12 @@
+
+// --------------------------------------------------------------------
+// This file is part of Conseal <https://conse.al/>.
+// Copyright (C) 2026 goggybox <https://github.com/goggybox>
+// Copyright (C) 2014 Electronic Frontier Foundation <https://www.eff.org/>
+
+// Please keep this header comment in all copies of the program.
+// --------------------------------------------------------------------
+
 // https://github.com/gorhill/uBlock/blob/395a4e36a939907982d3768c2d9eabb8aca8cbd1/src/web_accessible_resources/google-analytics_ga.js
 (function() {
     'use strict';
