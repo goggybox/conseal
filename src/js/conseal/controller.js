@@ -9,7 +9,6 @@
 
 import { log } from "../bootstrap.js";
 import audioDefense from "./defenses/audio/injector.js";
-import canvasDefense from "./defenses/canvas/injector.js";
 import statsStorage from "./statsController.js";
 
 let badger;
@@ -69,7 +68,6 @@ function injectOnPageLoad(details) {
         // HIGH LEVEL defenses:
         //      - AudioContext (handled here)
         audioDefense.inject(ctx);
-        canvasDefense.inject(ctx);
     }
     else if (level === 1) {
         // MILD LEVEL defenses
@@ -99,6 +97,20 @@ function handle(ctx) {
         // NO FIRST-PARTY DEFENSES ENABLED
         return;
     }
+}
+
+/**
+ * function handle canvas first-party fingerprinting attempts
+ * intercepted by Privacy Badger - PB ignores first-party
+ * attempts by default.
+ * @param {*} tab_id 
+ * @param {*} msg 
+ */
+function handleFingerprinting(tab_id, msg) {
+    if (!msg.scriptUrl || !msg.prop) { return; }
+
+    const method = msg.prop;
+    recordTrackingAttempt(method, msg.scriptUrl, tab_id);
 }
 
 function recordTrackingAttempt(method, url, tabId) {
@@ -159,5 +171,6 @@ export default {
     setProtectionLevel,
     recordTrackingAttempt,
     getSessionAttempts,
-    getAllSessionAttempts
+    getAllSessionAttempts,
+    handleFingerprinting
 };

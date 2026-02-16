@@ -28,7 +28,6 @@
  */
 
 (function () {
-
 // don't inject into non-HTML documents (such as XML documents)
 // but do inject into XHTML documents
 if (document instanceof HTMLDocument === false && (

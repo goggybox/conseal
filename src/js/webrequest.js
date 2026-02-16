@@ -731,6 +731,7 @@ function recordSupercookie(tab_id, frame_host) {
  * @param {Object} msg specific fingerprinting data
  */
 function recordFingerprinting(tab_id, msg) {
+  // ignore first-party scripts
   // exit if we failed to determine the originating script's URL
   if (!msg.scriptUrl) {
     // TODO find and fix where this happens
@@ -759,6 +760,13 @@ function recordFingerprinting(tab_id, msg) {
 
   // ignore first-party scripts
   if (!utils.isThirdPartyDomain(script_host, document_host)) {
+    // ---------- CONSEAL CHANGES ----------
+
+    // PB ignores the fingerprinting attempt if it is first-party. hand
+    // it over to Conseal instead!
+    conseal.handleFingerprinting(tab_id, msg);
+
+    // ----------   END CHANGES   ----------
     return;
   }
 
@@ -1476,20 +1484,23 @@ function dispatcher(request, sender, sendResponse) {
   }
 
   case "detectFingerprinting": {
-    if (sender.frameId > 0) {
-      // do not modify the JS environment in Cloudflare CAPTCHA frames
-      if (utils.hasOwn(sender, "origin") ?
-        sender.origin === "https://challenges.cloudflare.com" :
-        sender.url.startsWith("https://challenges.cloudflare.com/")) {
+    // ---------- CONSEAL CHANGES ----------
+      // if (sender.frameId > 0) {
+      //   // do not modify the JS environment in Cloudflare CAPTCHA frames
+      //   if (utils.hasOwn(sender, "origin") ?
+      //     sender.origin === "https://challenges.cloudflare.com" :
+      //     sender.url.startsWith("https://challenges.cloudflare.com/")) {
 
-        sendResponse(false);
-        break;
-      }
-    }
+      //     sendResponse(false);
+      //     break;
+      //   }
+      // }
 
-    sendResponse(badger.isLearningEnabled(sender.tab.id) &&
-      badger.isPrivacyBadgerEnabled(extractHostFromURL(sender.tab.url)));
+      // sendResponse(badger.isLearningEnabled(sender.tab.id) &&
+      //   badger.isPrivacyBadgerEnabled(extractHostFromURL(sender.tab.url)));
 
+    sendResponse(true);
+    // ----------   END CHANGES   ----------
     break;
   }
 
