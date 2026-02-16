@@ -22,58 +22,67 @@ import { log } from "../bootstrap.js";
 const STORAGE_KEY = "conseal_tracking_stats";
 const MS_PER_WEEK = 7 * 24 * 60 * 60 * 1000;
 
-async function recordAttempt(badger, site, method) {
-    console.log(`Storing ${method} attempt from ${site}`);
-    if (!site || !method) { return; }
+let writeQueue = Promise.resolve();
 
-    const data = await getAllStats(badger);
-    const now = Date.now();
+function recordAttempt(badger, site, method) {
 
-    if (!data[site]) {
-        // we do not yet have stats for this site. initialise
-        data[site] = {
-            methods: {},
-            firstSeen: now,
-            lastUpdated: now
-        };
-    }
+    writeQueue = writeQueue.then(async () => {
+        console.log(`Storing ${method} attempt from ${site}`);
+        if (!site || !method) { return; }
 
-    if (!data[site].methods[method]) {
-        // we do not yet have stats for this site for
-        // this particular method. initialise
-        data[site].methods[method] = {
-            total: 0,
-            weeklyAverage: 0,
-            history: [], // for each week, record {weekStart, total}
-            lastAttempt: null
-        };
-    }
+        const data = await getAllStats(badger);
+        const now = Date.now();
 
-    // add this, newest, attempt
-    const methodData = data[site].methods[method];
-    methodData.total++;
-    methodData.lastAttempt = now;
-    // include this attempt in the current week's totals.
-    const currentWeekStart = getWeekStart(now);
-    let currentWeek = methodData.history.find(h => h.weekStart === currentWeekStart);
-    if (!currentWeek) {
-        // we do not yet have stats for this week. initialise
-        currentWeek = { weekStart: currentWeekStart, count: 0 }
-        methodData.history.push(currentWeek);
-        // only keep the last 12 weeks
-        if (methodData.history.length > 12) {
-            methodData.history.shift();
+        if (!data[site]) {
+            // we do not yet have stats for this site. initialise
+            data[site] = {
+                methods: {},
+                firstSeen: now,
+                lastUpdated: now
+            };
         }
-    }
-    currentWeek.count++;
-    // recalculate weekly average in case weeks changed
-    const activeWeeks = methodData.history.filter(h => h.count > 0).length || 1;
-    const totalInHistory = methodData.history.reduce((sum, h) => sum + h.count, 0);
-    methodData.weeklyAverage = Math.round((totalInHistory / activeWeeks) * 10) / 10;
 
-    // store changes
-    data[site].lastUpdated = now;
-    badger.getSettings().setItem("consealSiteStats", data);
+        if (!data[site].methods[method]) {
+            // we do not yet have stats for this site for
+            // this particular method. initialise
+            data[site].methods[method] = {
+                total: 0,
+                weeklyAverage: 0,
+                history: [], // for each week, record {weekStart, total}
+                lastAttempt: null
+            };
+        }
+
+        // add this, newest, attempt
+        const methodData = data[site].methods[method];
+        methodData.total++;
+        methodData.lastAttempt = now;
+        // include this attempt in the current week's totals.
+        const currentWeekStart = getWeekStart(now);
+        let currentWeek = methodData.history.find(h => h.weekStart === currentWeekStart);
+        if (!currentWeek) {
+            // we do not yet have stats for this week. initialise
+            currentWeek = { weekStart: currentWeekStart, count: 0 }
+            methodData.history.push(currentWeek);
+            // only keep the last 12 weeks
+            if (methodData.history.length > 12) {
+                methodData.history.shift();
+            }
+        }
+        currentWeek.count++;
+        // recalculate weekly average in case weeks changed
+        const activeWeeks = methodData.history.filter(h => h.count > 0).length || 1;
+        const totalInHistory = methodData.history.reduce((sum, h) => sum + h.count, 0);
+        methodData.weeklyAverage = Math.round((totalInHistory / activeWeeks) * 10) / 10;
+
+        // store changes
+        data[site].lastUpdated = now;
+        badger.getSettings().setItem("consealSiteStats", data);
+    }).catch(err => {
+        console.error("CONSEAL writeQueue error in statsController: ", err)
+    });
+
+    return writeQueue;
 }
 
 /**

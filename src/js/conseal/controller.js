@@ -7,7 +7,6 @@
 // Please keep this header comment in all copies of the program.
 // --------------------------------------------------------------------
 
-import { log } from "../bootstrap.js";
 import audioDefense from "./defenses/audio/injector.js";
 import statsStorage from "./statsController.js";
 
@@ -109,8 +108,9 @@ function handle(ctx) {
 function handleFingerprinting(tab_id, msg) {
     if (!msg.scriptUrl || !msg.prop) { return; }
 
-    const method = msg.prop;
-    recordTrackingAttempt(method, msg.scriptUrl, tab_id);
+    // msg.prop does list a specific method, such as textFill, but we
+    // want just canvas.
+    recordTrackingAttempt("canvas", msg.scriptUrl, tab_id);
 }
 
 function recordTrackingAttempt(method, url, tabId) {
