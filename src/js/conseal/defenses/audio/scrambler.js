@@ -19,7 +19,7 @@
         try {
             chrome.runtime.sendMessage({
                 type: 'recordConsealTrackingAttempt',
-                method: 'audiocontext',
+                method: 'audio_context',
                 url: location.href,
                 tabId: window.__CONSEAL_TAB_ID__
             });

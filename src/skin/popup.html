@@ -181,16 +181,19 @@ Please keep this header comment in all copies of the program.
 
       <div id="conseal-protections-container">
         <!-- Show no attempts desc if no tracking attempts have been blocked -->
-         <p data-i18n="conseal_no_attempts_blocked_desc" id="i18n_conseal_no_attempts_blocked_desc"></p>
+        <p data-i18n="conseal_no_attempts_blocked_desc" id="i18n_conseal_no_attempts_blocked_desc"></p>
 
         <!-- Show protections button if tracking attempts have been blocked -->
         <div id="conseal-blocked-attempts-container">
           <div id="conseal-protections-button">
-              <p> <span id="conseal-attempts-blocked"></span> potential tracking attempts blocked.</p>
+              <p id="conseal-protections-button-text"> <span id="conseal-attempts-blocked"></span> potential tracking attempts blocked.</p>
               <div id="toggle-conseal-attempts">
                 <div id="toggle-conseal-attempts-expand" class="ui-icon ui-icon-caret-d"></div>
                 <div id="toggle-conseal-attempts-collapse" class="ui-icon ui-icon-caret-u hidden"></div>
               </div>
+          </div>
+          <div id="conseal-blocked-attempts-list">
+            <!-- Blocked fingerprinting attempts in the current tab session will appear here -->
           </div>
         </div>
       </div>

@@ -354,6 +354,13 @@ function init() {
   $(function() {
     handleText();
   })
+
+  // ---------- blocked attempts container ----------
+
+  // add event listener to blocked attempts button to toggle the list
+  $("#conseal-protections-button").on("click", () => {
+    document.getElementById("conseal-blocked-attempts-list").classList.toggle("hidden");
+  });
   
   /* * * * * * * * * * * * * * * * * * * *
    *         END CONSEAL CHANGES         *
@@ -473,6 +480,10 @@ function init() {
 }
 
 
+/* * * * * * * * * * * * * * * * * * * *
+ *           CONSEAL CHANGES           *
+ * * * * * * * * * * * * * * * * * * * */
+
 /**
  * update the popup to disable the tracking attempts
  * that have been blocked for the current tab.
@@ -484,6 +495,7 @@ function init() {
  *                      "audiocontext": 1,
  *                      ...
  *                    }
+ *                  }
  * @param {*} tabId 
  */
 function updateSessionStats(stats, tabId) {
@@ -492,6 +504,10 @@ function updateSessionStats(stats, tabId) {
     $('#i18n_conseal_no_attempts_blocked_desc').show();
     // hide the container that shows blocked attempts
     $('#conseal-blocked-attempts-container').hide();
+    // hide the blocked attempts list
+    document.getElementById("conseal-blocked-attempts-list").classList.add("hidden");
+    // update list contents
+    populateBlockedAttemptsList(stats);
   } else {
     // show the container and hide no attempts description
     $('#i18n_conseal_no_attempts_blocked_desc').hide();
@@ -499,8 +515,62 @@ function updateSessionStats(stats, tabId) {
 
     // show number of attempts made
     $('#conseal-attempts-blocked').text(`${stats.total}`);
+    // hide the blocked attempts list
+    document.getElementById("conseal-blocked-attempts-list").classList.add("hidden");
+    // update list contents
+    populateBlockedAttemptsList(stats);
   }
 }
+
+/**
+ * function to create an element, giving it classes and id.
+ * @param {String} type such as "div"
+ * @param {String} className 
+ * @param {String} id 
+ * @returns 
+ */
+function cr(type, className, id) {
+  const el = document.createElement(type);
+  if (className) { el.className = className; }
+  if (id) { el.id = id; }
+  return el;
+}
+
+/**
+ * replace underscores with spaces and capitalise first word
+ * @param {*} str 
+ * @returns 
+ */
+function formatFingerprintType(str) {
+  if (!str) return str;
+  const cleaned = str.replace(/_/g, " ").toLowerCase();
+  return cleaned[0].toUpperCase() + cleaned.slice(1);
+}
+
+function populateBlockedAttemptsList(stats) {
+  // first clear the list
+  const list = document.getElementById("conseal-blocked-attempts-list");
+  // <div class="conseal-blocked-attempts-list-item">
+  //   <p class="conseal-blocked-attempt-name">Canvas</p>
+  //   <p class="conseal-blocked-attempt-count">2</p>
+  // </div>
+  list.innerHTML = '';
+
+  // iterate through methods, and create a list-item for each.
+  for (const key in stats.methods) {
+    const item = cr("div", "conseal-blocked-attempts-list-item");
+    const name = cr("p", "conseal-blocked-attempt-name");
+    const count = cr("p", "conseal-blocked-attempt-count");
+    name.textContent = formatFingerprintType(key);
+    count.textContent = stats.methods[key];
+    item.append(name, count);
+    list.append(item);
+  }
+}
+
+/* * * * * * * * * * * * * * * * * * * *
+ *         END CONSEAL CHANGES         *
+ * * * * * * * * * * * * * * * * * * * */
 
 function openPage(url) {
   // first get the active tab
@@ -820,6 +890,7 @@ function createBreakageNote(domain, i18n_message_key) {
     $slider_allow.tooltipster('show');
   }
 }
+
 
 /**
  * Populates the contents of popup.

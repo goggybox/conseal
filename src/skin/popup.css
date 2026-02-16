@@ -136,7 +136,14 @@ html {
     font-weight: 500;
 }
 
+#conseal-blocked-attempts-container * {
+    padding:0;
+    margin:0;
+    gap:0;
+}
+
 #conseal-protections-button {
+    display: flex;
     background: var(--primary-button-background-colour);
     border: 2px solid var(--primary-button-border-colour);
     padding: 10px 10px 5px 10px;
@@ -145,9 +152,14 @@ html {
     font-weight: 500;
     user-select: none;
     cursor: pointer;
+    margin: 0;
 }
 #conseal-protections-button:hover {
     border: 2px solid var(--primary-focus-colour);
+}
+
+#conseal-protections-button-text {
+    width: 100%;
 }
 
 #toggle-conseal-attempts {
@@ -161,11 +173,25 @@ html {
 #conseal-attempts-blocked {
     color: var(--primary-focus-colour);
     font-weight: 1000;
+    margin: 0;
 }
 
 #conseal-protections-button p {
     padding: 0;
     margin: 0;
+}
+
+#conseal-blocked-attempts-list {
+    padding: 5px 10px;
+    padding-top: 10px;
+    background: var(--secondary-button-background-colour);
+    border: 2px solid var(--secondary-button-border-colour);
+    border-top: 0;
+}
+
+.conseal-blocked-attempts-list-item {
+    display: flex;
+    justify-content: space-between;
 }
 
 #protection-level-container {

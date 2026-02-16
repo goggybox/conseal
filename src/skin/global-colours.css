@@ -32,6 +32,8 @@ Please keep this header comment in all copies of the program.
         /* button colours */
         --primary-button-background-colour: #f0f8fc;
         --primary-button-border-colour: var(--primary-border-colour);
+        --secondary-button-background-colour: #f0f4f6;
+        --secondary-button-border-colour: #8b99a2;
 
         /* security level colours */
         --security-level-low-colour: #fe8888;
