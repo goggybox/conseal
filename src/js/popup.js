@@ -548,6 +548,7 @@ function formatFingerprintType(str) {
 }
 
 function populateBlockedAttemptsList(stats) {
+  if (!stats){ return; }
   // first clear the list
   const list = document.getElementById("conseal-blocked-attempts-list");
   // <div class="conseal-blocked-attempts-list-item">
@@ -973,6 +974,14 @@ function refreshPopup() {
     tabId: POPUP_DATA.tabId
   });
 
+  // display ToS;DR rating for current tab's website
+  chrome.runtime.sendMessage({
+    type: "getToSDRRating",
+    tabHost: POPUP_DATA.tabHost
+  }, function (rating) {
+    console.log(`${POPUP_DATA.tabHost} has rating ${rating}`);
+  });
+  
   /* ----------   END CHANGES   ---------- */
 
   // toggle activation buttons if privacy badger is not enabled for current url

@@ -9,6 +9,7 @@
 
 import audioDefense from "./defenses/audio/injector.js";
 import statsStorage from "./statsController.js";
+import tosdr from "../../data/tosdr/controller.js";
 
 let badger;
 
@@ -163,6 +164,17 @@ function getAllSessionAttempts() {
     return Array.from(sessionAttempts.entries());
 }
 
+async function getDomainRating(inp) {
+    try {
+        const rating = await tosdr.getDomainRating(inp);
+        console.log(`Obtained a rating of ${rating}`);
+        return rating;
+    } catch (error) {
+        console.error("Failed to get domain rating:", error);
+        return null;
+    }
+}
+
 export default {
     init,
     injectOnPageLoad,
@@ -172,5 +184,6 @@ export default {
     recordTrackingAttempt,
     getSessionAttempts,
     getAllSessionAttempts,
-    handleFingerprinting
+    handleFingerprinting,
+    getDomainRating
 };

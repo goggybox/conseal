@@ -1339,6 +1339,20 @@ function dispatcher(request, sender, sendResponse) {
       return true;
     }
 
+    // get the ToS;DR rating for the current website
+    case "getToSDRRating": {
+      conseal.getDomainRating(request.tabHost)
+          .then(rating => {
+              sendResponse(rating);
+          })
+          .catch(err => {
+              console.error("Error in getToSDRRating handler:", err);
+              sendResponse(null);
+          });
+
+      return true;
+    }
+
     // ----------   END CHANGES   ----------
 
   case "checkEnabled": {
@@ -1391,6 +1405,7 @@ function dispatcher(request, sender, sendResponse) {
         utils.hasOwn(tabData.blockedFrameUrls, frame_id) &&
         tabData.blockedFrameUrls[frame_id];
     sendResponse(blockedFrameUrls);
+
     break;
   }
 
