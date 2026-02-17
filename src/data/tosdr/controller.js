@@ -41,7 +41,10 @@ async function ensureDataLoaded() {
             const domains = entry.url.split(",");
             for (const domain of domains) {
                 const normalised = normaliseDomain(domain);
-                dataMap.set(normalised, entry.rating);
+                dataMap.set(normalised, {
+                    id: entry.id,
+                    rating: entry.rating
+                });
             }
         }
 

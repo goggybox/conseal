@@ -167,7 +167,6 @@ function getAllSessionAttempts() {
 async function getDomainRating(inp) {
     try {
         const rating = await tosdr.getDomainRating(inp);
-        console.log(`Obtained a rating of ${rating}`);
         return rating;
     } catch (error) {
         console.error("Failed to get domain rating:", error);

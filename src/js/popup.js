@@ -569,6 +569,31 @@ function populateBlockedAttemptsList(stats) {
   }
 }
 
+/**
+ * show the current website's rating.
+ * @param {*} rating - an object with "id" and "rating" fields
+ */
+function displayDomainRating(rating) {
+  const container = document.getElementById("tosdr-rating-container");
+  container.innerHTML = '';
+  const click_container = cr("div", null, "tosdr-click-container");
+  container.append(click_container);
+  // clear container
+  click_container.innerHTML = `
+  <div id="tosdr-rating-letter-container" style="background: var(--tosdr-${rating.rating.toLowerCase()}-rating-colour);">
+    <p id="tosdr-rating-letter">${rating.rating}</p>
+  </div>
+  <div id="tosdr-rating-desc-container">
+    <p id="tosdr-rating-desc">This website has a privacy rating of ${rating.rating} from ToS;DR.</p>
+  </div>
+  `;
+
+  click_container.addEventListener("click", () => {
+    chrome.tabs.create({url: `https://tosdr.org/en/service/${rating.id}`});
+  })
+
+}
+
 /* * * * * * * * * * * * * * * * * * * *
  *         END CONSEAL CHANGES         *
  * * * * * * * * * * * * * * * * * * * */
@@ -979,7 +1004,7 @@ function refreshPopup() {
     type: "getToSDRRating",
     tabHost: POPUP_DATA.tabHost
   }, function (rating) {
-    console.log(`${POPUP_DATA.tabHost} has rating ${rating}`);
+    displayDomainRating(rating);
   });
   
   /* ----------   END CHANGES   ---------- */

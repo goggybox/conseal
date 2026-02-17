@@ -56,6 +56,13 @@ Please keep this header comment in all copies of the program.
         /* extension badge colours */
         --badge-background-colour: #fd6565;
         --badge-text-colour: #fff;
+
+        /* ToS;DR rating colour */
+        --tosdr-a-rating-colour: #198754;
+        --tosdr-b-rating-colour: #79B752;
+        --tosdr-c-rating-colour: #FFC107;
+        --tosdr-d-rating-colour: #D66F2C;
+        --tosdr-e-rating-colour: #DC3545;
     }
 }
 
@@ -101,5 +108,12 @@ Please keep this header comment in all copies of the program.
         /* extension badge colours */
         --badge-background-colour: #fd6565;
         --badge-text-colour: #fff;
+
+        /* ToS;DR rating colour */
+        --tosdr-a-rating-colour: #198754;
+        --tosdr-b-rating-colour: #79B752;
+        --tosdr-c-rating-colour: #FFC107;
+        --tosdr-d-rating-colour: #D66F2C;
+        --tosdr-e-rating-colour: #DC3545;
     }
 }
