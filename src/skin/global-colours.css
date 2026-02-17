@@ -72,6 +72,9 @@ Please keep this header comment in all copies of the program.
         --primary-header-background: #7A8F9A;
         --primary-footer-background: #7A8F9A;
         --primary-background-colour: #3f474b;
+        --privacy-badger-background-colour: var(--primary-background-colour);
+        --privacy-badger-header-colour: #2a3033;
+        --conseal-background-colour: #616d73;
 
         /* text colours */
         --primary-text-colour: #c5d2d9;
@@ -100,7 +103,7 @@ Please keep this header comment in all copies of the program.
         --primary-textarea-border-colour: var(--primary-border-colour);
 
         /* focus colour */
-        --primary-focus-colour: #886784;
+        --primary-focus-colour: #b788b1;
 
         /* hover colour */
         --primary-hover-colour: var(--primary-focus-colour);
@@ -115,5 +118,6 @@ Please keep this header comment in all copies of the program.
         --tosdr-c-rating-colour: #FFC107;
         --tosdr-d-rating-colour: #D66F2C;
         --tosdr-e-rating-colour: #DC3545;
+        --tosdr-unknown-rating-colour: var(--primary-focus-colour);
     }
 }

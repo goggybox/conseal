@@ -56,6 +56,7 @@ async function ensureDataLoaded() {
         throw err;
     } finally {
         isLoading = false;
+        console.log(`Map size: ${dataMap.size}`);
     }
 }
 

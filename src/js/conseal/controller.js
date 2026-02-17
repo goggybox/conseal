@@ -109,6 +109,12 @@ function handle(ctx) {
 function handleFingerprinting(tab_id, msg) {
     if (!msg.scriptUrl || !msg.prop) { return; }
 
+    // only highest level of protection includes canvas fingerprinting
+    // defenses; ignore it if not in highest level
+    if (getProtectionLevel() !== 2) {
+        return;
+    }
+
     // msg.prop does list a specific method, such as textFill, but we
     // want just canvas.
     recordTrackingAttempt("canvas", msg.scriptUrl, tab_id);

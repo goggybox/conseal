@@ -578,19 +578,35 @@ function displayDomainRating(rating) {
   container.innerHTML = '';
   const click_container = cr("div", null, "tosdr-click-container");
   container.append(click_container);
-  // clear container
-  click_container.innerHTML = `
-  <div id="tosdr-rating-letter-container" style="background: var(--tosdr-${rating.rating.toLowerCase()}-rating-colour);">
-    <p id="tosdr-rating-letter">${rating.rating}</p>
-  </div>
-  <div id="tosdr-rating-desc-container">
-    <p id="tosdr-rating-desc">This website has a privacy rating of ${rating.rating} from ToS;DR.</p>
-  </div>
-  `;
 
-  click_container.addEventListener("click", () => {
-    chrome.tabs.create({url: `https://tosdr.org/en/service/${rating.id}`});
-  })
+  if (rating && rating.rating) {
+    click_container.innerHTML = `
+    <div id="tosdr-rating-letter-container" style="background: var(--tosdr-${rating.rating.toLowerCase()}-rating-colour);">
+      <p id="tosdr-rating-letter">${rating.rating}</p>
+    </div>
+    <div id="tosdr-rating-desc-container">
+      <p id="tosdr-rating-desc">This website has a privacy rating of ${rating.rating} from ToS;DR.</p>
+    </div>
+    `;
+
+    click_container.addEventListener("click", () => {
+      chrome.tabs.create({url: `https://tosdr.org/en/service/${rating.id}`});
+    })
+  } else {
+    console.log("NO RATING");
+    click_container.innerHTML = `
+    <div id="tosdr-rating-letter-container" style="background: var(--tosdr-unknown-rating-colour);">
+      <p id="tosdr-rating-letter">?</p>
+    </div>
+    <div id="tosdr-rating-desc-container">
+      <p id="tosdr-rating-desc">This website has not been given a privacy rating by ToS;DR.</p>
+    </div>
+    `;
+
+    click_container.addEventListener("click", () => {
+      chrome.tabs.create({url: `https://tosdr.org/`});
+    })
+  }
 
 }
 
@@ -944,7 +960,7 @@ function refreshPopup() {
       
       /* ---------- CONSEAL CHANGES ---------- */
       // this code runs when on a page where conseal&privacy badger
-      // are disabled (special pages such as about:config).
+      // are DISABLED (special pages such as about:config).
 
       // conseal will also be disabled on pages like this.
       $('#i18n_conseal_disabled_header').show();
@@ -953,6 +969,7 @@ function refreshPopup() {
       $('#i18n_conseal_enabled_desc').hide();
       $('.conseal_disabled_icon').show();
       $('.conseal_enabled_icon').hide();
+      $('#tosdr-rating-container').hide();
 
       // hide protections container
       $('#conseal-protections-container').hide();
@@ -981,7 +998,7 @@ function refreshPopup() {
 
   /* ---------- CONSEAL CHANGES ---------- */
   // this code runs when on a page where conseal&privacy badger
-  // are enabled.
+  // are ENABLED.
 
   $('#i18n_conseal_disabled_header').hide();
   $('#i18n_conseal_enabled_header').show();
@@ -989,6 +1006,7 @@ function refreshPopup() {
   $('#i18n_conseal_enabled_desc').show();
   $('.conseal_disabled_icon').hide();
   $('.conseal_enabled_icon').show();
+  $('#tosdr-rating-container').show();
   
   // show protections container
   $('#conseal-protections-container').show();
