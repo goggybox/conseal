@@ -1,0 +1,191 @@
+domain,iab_tier2
+google.com,Search Engines
+googleapis.com,Cloud Services
+gstatic.com,Cloud Services
+cloudflare.com,Network Services
+microsoft.com,Software & Applications
+apple.com,Consumer Electronics
+facebook.com,Social Networking
+amazonaws.com,Cloud Services
+googlevideo.com,Streaming Media
+fbcdn.net,Social Networking
+instagram.com,Social Networking
+whatsapp.net,Messaging Services
+amazon.com,Ecommerce
+doubleclick.net,Advertising Networks
+youtube.com,Streaming Media
+googleusercontent.com,Cloud Services
+bing.com,Search Engines
+live.com,Email Services
+googlesyndication.com,Advertising Networks
+netflix.com,Streaming Media
+icloud.com,Cloud Services
+apple-dns.net,Network Services
+tiktokcdn.com,Content Delivery Networks
+cloudflare-dns.com,Network Services
+tiktokv.com,Social Networking
+cloudfront.net,Content Delivery Networks
+gvt2.com,Content Delivery Networks
+yahoo.com,Search Engines
+ytimg.com,Content Delivery Networks
+akamai.net,Content Delivery Networks
+aaplimg.com,Consumer Electronics
+gvt1.com,Content Delivery Networks
+cdninstagram.com,Social Networking
+office.com,Software & Applications
+akamaiedge.net,Content Delivery Networks
+spotify.com,Streaming Media
+samsung.com,Consumer Electronics
+ui.com,Networking Equipment
+dns.google,Network Services
+google-analytics.com,Advertising Networks
+one.one,Cloud Services
+msn.com,News Portals
+wikipedia.org,Reference
+googletagmanager.com,Advertising Networks
+fastly.net,Content Delivery Networks
+criteo.com,Advertising Networks
+googleadservices.com,Advertising Networks
+trafficmanager.net,Cloud Services
+msftncsi.com,Cloud Services
+app-measurement.com,Advertising Networks
+amazon-adsystem.com,Advertising Networks
+azure.com,Cloud Services
+a2z.com,Ecommerce
+baidu.com,Search Engines
+snapchat.com,Social Networking
+applovin.com,Advertising Networks
+appsflyersdk.com,Cloud Services
+roblox.com,Gaming
+unity3d.com,Gaming
+steamserver.net,Cloud Services
+sentry.io,Software & Applications
+app-analytics-services.com,Advertising Networks
+linkedin.com,Social Networking
+ggpht.com,Cloud Services
+windows.net,Cloud Services
+rubiconproject.com,Advertising Networks
+windows.com,Software & Applications
+whatsapp.com,Messaging Services
+microsoftonline.com,Software & Applications
+pubmatic.com,Advertising Networks
+taboola.com,Advertising Networks
+office.net,Software & Applications
+adtrafficquality.google,Security Services
+skype.com,Messaging Services
+xiaomi.com,Consumer Electronics
+qq.com,Social Networking
+amazon.dev,Cloud Services
+windowsupdate.com,Software Updates
+adsrvr.org,Advertising Networks
+kwai-pro.com,Cloud Services
+vungle.com,Advertising Networks
+msftconnecttest.com,Cloud Services
+sharepoint.com,Collaboration Tools
+doubleverify.com,Advertising Networks
+digicert.com,Security Services
+miui.com,Software & Applications
+android.com,Software & Applications
+inmobi.com,Advertising Networks
+chatgpt.com,Artificial Intelligence
+office365.com,Software & Applications
+gmail.com,Email Services
+proton.me,Email Services
+aws.dev,Cloud Services
+cdn-apple.com,Content Delivery Networks
+byteconnect.io,Advertising Networks
+google.co.uk,Search Engines
+bbc.co.uk,News Portals
+amazon.co.uk,Ecommerce
+facebook.com,Social Networking
+wikipedia.org,Reference
+reddit.com,Community Forums
+instagram.com,Social Networking
+x.com,Social Networking
+yahoo.com,Search Engines
+ebay.co.uk,Ecommerce
+pornhub.com,Adult Content
+bing.com,Search Engines
+live.com,Email Services
+gov.uk,Government Portals
+linkedin.com,Social Networking
+temu.com,Ecommerce
+office.com,Software & Applications
+dailymail.co.uk,News Portals
+duckduckgo.com,Search Engines
+microsoft.com,Software & Applications
+netflix.com,Streaming Media
+rightmove.co.uk,Real Estate
+theguardian.com,News Portals
+msn.com,News Portals
+tiktok.com,Social Networking
+royalmail.com,Delivery Services
+apple.com,Consumer Electronics
+paypal.com,Financial Services
+whatsapp.com,Messaging Services
+universal-credit.service.gov.uk,Government Portals
+xhamster.com,Adult Content
+bbc.com,News Portals
+sky.com,News Portals
+xvideos.com,Adult Content
+argos.co.uk,Ecommerce
+twitch.tv,Gaming
+nytimes.com,News Portals
+evri.com,Delivery Services
+booking.com,Travel & Accommodation
+imdb.com,Reference
+indeed.com,Job Search
+etsy.com,Ecommerce
+spotify.com,Streaming Media
+nhs.uk,Health Services
+asda.com,Ecommerce
+pinterest.com,Social Networking
+bbcgoodfood.com,Food & Recipes
+autotrader.co.uk,Automotive
+thesun.co.uk,News Portals
+discord.com,Social Networking
+skysports.com,Sports
+xnxx.com,Adult Content
+next.co.uk,Ecommerce
+currys.co.uk,Ecommerce
+shopify.com,Ecommerce
+roblox.com,Gaming
+sainsburys.co.uk,Ecommerce
+tesco.com,Ecommerce
+boots.com,Ecommerce
+onlyfans.com,Adult Content
+quora.com,Community Forums
+diy.com,Home & Garden
+dunelm.com,Home & Garden
+canva.com,Software & Applications
+fabswingers.com,Adult Content
+telegraph.co.uk,News Portals
+zoopla.co.uk,Real Estate
+company-information.service.gov.uk,Government Portals
+marksandspencer.com,Ecommerce
+metoffice.gov.uk,Government Portals
+ticketmaster.co.uk,Ecommerce
+amazon.com,Ecommerce
+samsung.com,Consumer Electronics
+aliexpress.com,Ecommerce
+hotukdeals.com,Ecommerce
+itv.com,News Portals
+openai.com,Artificial Intelligence
+yandex.com,Search Engines
+national-lottery.co.uk,Gambling
+ikea.com,Home & Garden
+github.com,Software & Applications
+shein.co.uk,Ecommerce
+tripadvisor.co.uk,Travel & Accommodation
+skyscanner.net,Travel & Accommodation
+independent.co.uk,News Portals
+moneysavingexpert.com,Financial Services
+trustpilot.com,Community Forums
+tax.service.gov.uk,Government Portals
+disneyplus.com,Streaming Media
+screwfix.com,Home & Garden
+twitter.com,Social Networking
+johnlewis.com,Ecommerce
+mirror.co.uk,News Portals
+pickmypostcode.com,Gambling
+sportsdirect.com,Ecommerce

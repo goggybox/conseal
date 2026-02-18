@@ -1341,7 +1341,7 @@ function dispatcher(request, sender, sendResponse) {
 
     // get the ToS;DR rating for the current website
     case "getToSDRRating": {
-      conseal.getDomainRating(request.tabHost)
+      conseal.getDomainRatingAndAlternatives(request.tabHost)
           .then(rating => {
               sendResponse(rating);
           })

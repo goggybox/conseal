@@ -8,9 +8,13 @@
 // --------------------------------------------------------------------
 
 let dataMap = new Map();
+let allEntries = [];
+
 let isLoading = false;
 let hasLoaded = false;
 let loadError = null;
+
+const ratingHierarchy = ["A", "B", "C", "D", "E"];
 
 /**
  * lazy load the data only when requested - ensures service worker is awake
@@ -36,6 +40,7 @@ async function ensureDataLoaded() {
         }
 
         const data = await response.json();
+        allEntries = data;
 
         for (const entry of data) {
             const domains = entry.url.split(",");
@@ -43,7 +48,9 @@ async function ensureDataLoaded() {
                 const normalised = normaliseDomain(domain);
                 dataMap.set(normalised, {
                     id: entry.id,
-                    rating: entry.rating
+                    name: entry.name,
+                    rating: entry.rating,
+                    category: entry.category || "unknown"
                 });
             }
         }
@@ -75,6 +82,67 @@ async function getDomainRating(inp) {
     return dataMap.get(normalised) || null;
 }
 
+async function getDomainRatingAndAlternatives(inp) {
+    await ensureDataLoaded();
+
+    const normalised = normaliseDomain(inp);
+    const current = dataMap.get(normalised);
+
+    if (!current) return null;
+    const alternatives = await getHigherRatedInCategory(current);
+
+    return {
+        ...current,
+        alternatives
+    };
+}
+
+/**
+ * compare two ratings.
+ * returns true if ratingA is higher than ratingB 
+ * eg returns true if ratingA=B and ratingB=E
+ * @param {*} ratingA 
+ * @param {*} ratingB 
+ */
+function isHigherRating(ratingA, ratingB) {
+    return ratingHierarchy.indexOf(ratingA) < ratingHierarchy.indexOf(ratingB);
+}
+
+/**
+ * get all entries of the same category that have a higher rating
+ * @param {*} input - either a domain string, or entry object from getDomainRating
+ */
+async function getHigherRatedInCategory(input) {
+    await ensureDataLoaded();
+    let current;
+
+    if (typeof input === "string") {
+        const normalised = normaliseDomain(input);
+        current = dataMap.get(normalised);
+    } else {
+        current = input;
+    }
+
+    if (!current || !current.category) return [];
+
+    const { category, rating } = current;
+
+    return allEntries
+        .filter(entry =>
+            entry.category === category &&
+            entry.rating &&
+            isHigherRating(entry.rating, rating)
+        )
+        .map(entry => ({
+            id: entry.id,
+            name: entry.name,
+            rating: entry.rating,
+            category: entry.category
+        }));
+}
+
 export default {
-    getDomainRating
+    getDomainRating,
+    getHigherRatedInCategory,
+    getDomainRatingAndAlternatives
 };

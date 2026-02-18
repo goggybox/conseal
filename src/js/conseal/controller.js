@@ -180,6 +180,16 @@ async function getDomainRating(inp) {
     }
 }
 
+async function getDomainRatingAndAlternatives(inp) {
+    try {
+        const rating = await tosdr.getDomainRatingAndAlternatives(inp);
+        return rating;
+    } catch (error) {
+        console.error("Failed to get domain rating:", error);
+        return null;
+    }
+}
+
 export default {
     init,
     injectOnPageLoad,
@@ -190,5 +200,6 @@ export default {
     getSessionAttempts,
     getAllSessionAttempts,
     handleFingerprinting,
-    getDomainRating
+    getDomainRating,
+    getDomainRatingAndAlternatives
 };

@@ -278,7 +278,6 @@ function init() {
   //UPDATE SESSION STATS
   getTab(async function(tab) {
     if (!tab || !tab.id) {
-      console.log("No active tab found");
       return;
     }
 
@@ -593,7 +592,6 @@ function displayDomainRating(rating) {
       chrome.tabs.create({url: `https://tosdr.org/en/service/${rating.id}`});
     })
   } else {
-    console.log("NO RATING");
     click_container.innerHTML = `
     <div id="tosdr-rating-letter-container" style="background: var(--tosdr-unknown-rating-colour);">
       <p id="tosdr-rating-letter">?</p>

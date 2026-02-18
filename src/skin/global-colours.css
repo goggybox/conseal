@@ -63,6 +63,7 @@ Please keep this header comment in all copies of the program.
         --tosdr-c-rating-colour: #FFC107;
         --tosdr-d-rating-colour: #D66F2C;
         --tosdr-e-rating-colour: #DC3545;
+        --tosdr-unknown-rating-colour: var(--primary-focus-colour);
     }
 }
 
