@@ -7,6 +7,11 @@
 // Please keep this header comment in all copies of the program.
 // --------------------------------------------------------------------
 
+// --------------------------------------------------------------------
+// This file is adapted from sereneblue's Chameleon.
+// Copyright (C) sereneblue <https://github.com/sereneblue/chameleon>
+// --------------------------------------------------------------------
+
 let devices = {
   mobile: {
     and1: [
