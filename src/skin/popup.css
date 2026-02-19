@@ -120,6 +120,86 @@ html {
     width: 100%;
 }
 
+/* TOSDR */
+
+#tosdr-warning-click-container {
+    background: var(--primary-warning-background-colour);
+    color: var(--primary-warning-text-colour);
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+    place-items: center;
+    font-family: "Manjari";
+    user-select: none;
+    cursor: pointer;
+    gap: 20px;
+    height: fit-content;
+}
+#tosdr-warning-text {
+    font-size: 13px;
+    padding: 0 10px;
+    text-align: left;
+}
+#tosdr-website-selector {
+    width: fit-content;
+    font-size: 18px;
+    transform: translateX(-20px) translateY(-5px);
+}
+
+#tosdr-website-list {
+    background: var(--conseal-background-colour);
+    border: 2px solid var(--primary-warning-background-colour);
+    border-top: 0;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+#tosdr-website {
+    display: flex;
+    place-items: center;
+    height: 40px;
+    text-align: left;
+    gap: 20px;
+    border-bottom: 2px solid var(--primary-border-colour);
+    margin: 0 10px 0px 10px;
+    user-select: none;
+    cursor: pointer;
+}
+#tosdr-website:hover {
+    background: rgba(0,0,0,0.05);
+}
+#tosdr-website.last {
+    border-bottom: 0;
+}
+
+#tosdr-website-rating-container {
+    display: flex;
+    place-items: center;
+    justify-content: center;
+    width: 27px;
+    height: 27px;
+    border: 2px solid var(--primary-border-colour);
+    background: var(--tosdr-b-rating-colour);
+}
+#tosdr-website-rating-letter {
+    font-weight: 1000;
+    font-size: 19px;
+    color: white;
+    line-height: 14px;
+    transform: translateY(2px);
+}
+#tosdr-website-name {
+    font-size: 18px;
+    color: var(--primary-text-colour);
+    font-weight: 1000;
+}
+#tosdr-website-domain {
+    font-size: 16px;
+    color: var(--tertiary-text-colour);
+}
+
+/* ----- */
+
 .conseal_disabled_icon, .conseal_enabled_icon {
 
 }

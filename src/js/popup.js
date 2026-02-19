@@ -606,6 +606,56 @@ function displayDomainRating(rating) {
     })
   }
 
+  // display website warning if rated D or E, and there are other similar websites of a higher rating
+  //  - warning will direct them to the higher rated websites
+  const warningContainer = document.getElementById("tosdr-warning-container");
+  const listContainer = document.getElementById("tosdr-website-list");
+  listContainer.classList.add("hidden"); // list should always initialise to hidden
+  if ((rating.rating === "D" || rating.rating === "E") && (rating.alternatives && rating.alternatives.length > 0)) {
+    // show the warning and alternative websites
+    warningContainer.innerHTML = '';
+    warningContainer.classList.remove("hidden");
+    listContainer.innerHTML = '';
+
+    const clickContainer = cr("div", null, "tosdr-warning-click-container");
+    warningContainer.append(clickContainer);
+    clickContainer.innerHTML = `
+      <p id="tosdr-warning-text">
+        This website has a very poor privacy rating from ToS;DR. Take a look at similar
+        websites that have been rated higher.
+      </p>
+      <div id="tosdr-website-selector">⌄</div>
+    `;
+    clickContainer.addEventListener("click", () => {
+      document.getElementById("tosdr-website-list").classList.toggle("hidden");
+    });
+
+    // <div id="tosdr-website">
+    //   <div id="tosdr-website-rating-container"><p id="tosdr-website-rating-letter">B</p></div>
+    //   <p id="tosdr-website-name">BBC</p>
+    //   <p id="tosdr-website-domain">bbc.co.uk</p>
+    // </div>
+    if (rating.category) {
+      for (const [index, site] of rating.alternatives.entries()) {
+        const websiteElem = cr("div", null, "tosdr-website");
+        websiteElem.innerHTML = `
+          <div id="tosdr-website-rating-container" style="background: var(--tosdr-${site.rating.toLowerCase()}-rating-colour);"><p id="tosdr-website-rating-letter">${site.rating}</p></div>
+          <p id="tosdr-website-name">${site.name}</p>
+          <p id="tosdr-website-domain">${site.url.split(",")[0]}</p>
+        `;
+        listContainer.append(websiteElem);
+        if (index === rating.alternatives.length - 1) { websiteElem.classList.add("last"); }
+        websiteElem.addEventListener("click", () => {
+          chrome.tabs.create({url: `https://${site.url.split(",")[0]}`});
+        })
+      }
+    }
+
+  } else {
+    // don't show
+
+  }
+
 }
 
 /* * * * * * * * * * * * * * * * * * * *

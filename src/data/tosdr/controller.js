@@ -50,6 +50,7 @@ async function ensureDataLoaded() {
                     id: entry.id,
                     name: entry.name,
                     rating: entry.rating,
+                    url: entry.url,
                     category: entry.category || "unknown"
                 });
             }
@@ -79,16 +80,29 @@ function normaliseDomain(domain) {
 async function getDomainRating(inp) {
     await ensureDataLoaded();
     const normalised = normaliseDomain(inp);
-    return dataMap.get(normalised) || null;
+    
+    if (dataMap.has(normalised)) {
+        return dataMap.get(normalised);
+    }
+
+    const parts = normalised.split(".");
+
+    for (let i = 1; i < parts.length - 1; i++) {
+        const candidate = parts.slice(i).join(".");
+        if (dataMap.has(candidate)) {
+            return dataMap.get(candidate);
+        }
+    }
+
+    return null;
 }
 
 async function getDomainRatingAndAlternatives(inp) {
     await ensureDataLoaded();
 
-    const normalised = normaliseDomain(inp);
-    const current = dataMap.get(normalised);
-
+    const current = await getDomainRating(inp);
     if (!current) return null;
+    
     const alternatives = await getHigherRatedInCategory(current);
 
     return {
@@ -123,7 +137,10 @@ async function getHigherRatedInCategory(input) {
         current = input;
     }
 
-    if (!current || !current.category) return [];
+    console.log("INPUT IS :");
+    console.log(input);
+
+    if (!current || !current.category || current.category === "unknown") return [];
 
     const { category, rating } = current;
 
@@ -137,6 +154,7 @@ async function getHigherRatedInCategory(input) {
             id: entry.id,
             name: entry.name,
             rating: entry.rating,
+            url: entry.url,
             category: entry.category
         }));
 }

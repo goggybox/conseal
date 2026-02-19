@@ -43,6 +43,10 @@ Please keep this header comment in all copies of the program.
         /* icon colours */
         --heart-icon-colour: #fe8888;
 
+        /* warning colours */
+        --primary-warning-background-colour: #f99d9d;
+        --primary-warning-text-colour: #852323;
+
         /* textarea input box colour */
         --primary-textarea-background-colour: var(--primary-button-background-colour);
         --primary-textarea-border-colour: var(--primary-border-colour);
@@ -98,6 +102,10 @@ Please keep this header comment in all copies of the program.
 
         /* icon colours */
         --heart-icon-colour: #fe8888;
+
+        /* warning colours */
+        --primary-warning-background-colour: #cc6565;
+        --primary-warning-text-colour: #5c1111;
 
         /* textarea input box colour */
         --primary-textarea-background-colour: var(--primary-button-background-colour);

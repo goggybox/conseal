@@ -396,14 +396,14 @@
     "name": "Fox News",
     "url": "foxnews.com,foxnewsrundown.com",
     "rating": "E",
-    "category": "News Portals"
+    "category": "News"
   },
   {
     "id": 318,
     "name": "CNN",
     "url": "cnn.com",
     "rating": "E",
-    "category": "News Portals"
+    "category": "News"
   },
   {
     "id": 319,
@@ -417,7 +417,7 @@
     "name": "BBC",
     "url": "bbc.com",
     "rating": "D",
-    "category": "News Portals"
+    "category": "News"
   },
   {
     "id": 324,
@@ -858,7 +858,7 @@
     "name": "New York Times",
     "url": "nytimes.com,nytimesn7cgmftshazwhfgzm37qxb44r64ytbb2dj3x62d2lljsciiyd.onion",
     "rating": "D",
-    "category": "News Portals"
+    "category": "News"
   },
   {
     "id": 743,
@@ -1920,9 +1920,16 @@
   {
     "id": 2531,
     "name": "NBC News",
-    "url": "nbcuniversal.com,nbcnews.com,nbcsports.com,nbc.com,syfy.com,eonline.com,bravotv.com",
+    "url": "nbcuniversal.com,nbcsports.com,nbc.com,syfy.com,eonline.com,bravotv.com",
     "rating": "E",
     "category": "unknown"
+  },
+  {
+    "id": 2531,
+    "name": "NBC News",
+    "url": "nbcnews.com",
+    "rating": "E",
+    "category": "News"
   },
   {
     "id": 2532,
@@ -2286,13 +2293,6 @@
     "name": "Swiss Government",
     "url": "admin.ch",
     "rating": "C",
-    "category": "unknown"
-  },
-  {
-    "id": 2844,
-    "name": "Google Chrome",
-    "url": "google.com/chrome",
-    "rating": "D",
     "category": "unknown"
   },
   {
