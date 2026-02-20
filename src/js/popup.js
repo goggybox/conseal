@@ -611,7 +611,7 @@ function displayDomainRating(rating) {
   const warningContainer = document.getElementById("tosdr-warning-container");
   const listContainer = document.getElementById("tosdr-website-list");
   listContainer.classList.add("hidden"); // list should always initialise to hidden
-  if ((rating.rating === "D" || rating.rating === "E") && (rating.alternatives && rating.alternatives.length > 0)) {
+  if ((rating) && (rating.rating === "D" || rating.rating === "E") && (rating.alternatives && rating.alternatives.length > 0)) {
     // show the warning and alternative websites
     warningContainer.innerHTML = '';
     warningContainer.classList.remove("hidden");
@@ -1073,6 +1073,16 @@ function refreshPopup() {
   }, function (rating) {
     displayDomainRating(rating);
   });
+
+  // get tab's profile
+  chrome.runtime.sendMessage({
+    type: "getTabProfile",
+    tabId: POPUP_DATA.tabId
+  }, (response) => {
+    console.log("CONSEAL: Profile for current tab:");
+    console.log(response);
+  });
+
   
   /* ----------   END CHANGES   ---------- */
 

@@ -1353,6 +1353,18 @@ function dispatcher(request, sender, sendResponse) {
       return true;
     }
 
+    // get Conseal profile for tab
+    case "getTabProfile": {
+      try {
+        const profile = conseal.getProfileForTab(request.tabId);
+        sendResponse(profile);
+      } catch (err) {
+        console.error("Error in getTabProfile handler:", err);
+        sendResponse(null);
+      }
+      return true;
+    }
+
     // ----------   END CHANGES   ----------
 
   case "checkEnabled": {

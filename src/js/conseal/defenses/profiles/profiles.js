@@ -12,7 +12,7 @@
 // Copyright (C) sereneblue <https://github.com/sereneblue/chameleon>
 // --------------------------------------------------------------------
 
-import { devices } from 'devices.js';
+import { devices } from './devices.js';
 
 const BrowserVersions = {
   edg: { desktop: '142.0.0.0', desktopChrome: '142.0.0.0', deprecated: '109.0.1518.55', deprecatedChrome: '109.0.0.0', android: '142.0.0.0', androidChrome: '142.0.0.0' },

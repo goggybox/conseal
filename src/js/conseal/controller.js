@@ -11,6 +11,7 @@ import audioDefense from "./defenses/audio/injector.js";
 import statsStorage from "./statsController.js";
 import tosdr from "../../data/tosdr/controller.js";
 import { Generator } from "./defenses/profiles/profiles.js";
+import { generateSpoofingCode } from "./defenses/profiles/spoofing.js";
 
 let badger;
 
@@ -35,7 +36,17 @@ let sessionAttempts = new Map();
 
 function init(data) {
     badger = data["badger"];
-    profileGenerator = new Generator([]);
+    
+    try {
+        if (typeof Generator !== 'function') {
+            throw new Error('Generator class not found');
+        }
+        profileGenerator = new Generator([]);
+        console.log("CONSEAL: Profile generator initialised");
+    } catch (err) {
+        console.error("CONSEAL: Failed to initialise profile generator: ", err);
+        profileGenerator = null;
+    }
 
     // run injectOnPageLoad when page load event fires
     browser.webNavigation.onCommitted.addListener(
@@ -51,6 +62,43 @@ function init(data) {
     });
 
     console.log("CONSEAL: Initialised Conseal");
+
+    // profile spoofing listener
+    if (profileGenerator && browser?.webRequest?.onBeforeSendHeaders) {
+        browser.webRequest.onBeforeSendHeaders.addListener(
+            (details) => {
+                console.log("CONSEAL: SPOOFING WEBREQUEST HEADER");
+                const profile = tabProfiles.get(details.tabId)?.data;
+                if (!profile?.accept || !profile?.navigator?.userAgent) {
+                    return;
+                }
+
+                const newHeaders = details.requestHeaders.map(header => {
+                    const nameLower = header.name.toLowerCase();
+
+                    if (nameLower === 'user-agent') {
+                        return { name: header.name, value: profile.navigator.userAgent };
+                    }
+                    if (nameLower === 'accept') {
+                        return { name: header.name, value: profile.accept.header };
+                    }
+                    if (nameLower === 'accept-encoding') {
+                        const isHttps = details.url.startsWith('https');
+                        return {
+                            name: header.name,
+                            value: isHttps ? profile.accept.encodingHTTPS : profile.accept.encodingHTTP
+                        };
+                    }
+                    return header;
+                });
+
+                return { requestHeaders: newHeaders };
+            },
+            { urls: ['<all_urls>'] },
+            ['blocking', 'requestHeaders']
+        );
+        console.log("CONSEAL: webRequest header spoofing listener added");
+    }
 };
 
 function getOrCreateProfileForTab(tabId, osPreference = 'randomDesktop') {
@@ -103,10 +151,10 @@ function injectOnPageLoad(details) {
         //      - profile generation
         audioDefense.inject(ctx);
 
-        // const profileEntry = getOrCreateProfileForTab(tabId, 'randomDesktop');
-        // if (profileEntry) {
-        //     applyFingerprintProfile(tabId, profileEntry.data);
-        // }
+        const profileEntry = getOrCreateProfileForTab(tabId, 'randomDesktop');
+        if (profileEntry) {
+            applyFingerprintProfile(tabId, profileEntry.data);
+        }
     }
     else if (level === 1) {
         // MILD LEVEL defenses
@@ -115,119 +163,34 @@ function injectOnPageLoad(details) {
 
 async function applyFingerprintProfile(tabId, profile) {
     try {
-        await chrome.scripting.executeScript({
-            target: { tabId: tabId, allFrames: false },
-            func: spoofPageContext,
-            args: [profile]
+        const injectionCode = generateSpoofingCode(profile);
+
+        await browser.tabs.executeScript(tabId, {
+            code: `
+                (function() {
+                    const script = document.createElement('script');
+                    script.textContent = ${JSON.stringify(injectionCode)};
+                    script.setAttribute('data-conseal', 'true');
+                    
+                    const target = document.documentElement || document.head || document;
+                    if (target.firstChild) {
+                        target.insertBefore(script, target.firstChild);
+                    } else {
+                        target.appendChild(script);
+                    }
+                    
+                    if (script.parentNode) {
+                        script.parentNode.removeChild(script);
+                    }
+                })();
+            `,
+            runAt: 'document_start',
+            allFrames: false
         });
+        
+        console.log(`CONSEAL: Injected profile spoofing for tab ${tabId}`);
     } catch (err) {
         console.warn(`CONSEAL failed to inject profile for tab ${tabId}:`, err);
-    }
-}
-function spoofPageContext(profile) {
-    if (window.__consealProfileApplied) {
-        return;
-    }
-    window.__consealProfileApplied = true;
-
-    if (profile.navigator) {
-        const nav = profile.navigator;
-
-        const overrideProp = (obj, prop, value) => {
-            if (value === null || value === undefined) { return; }
-            try {
-                Object.defineProperties(obj, prop, {
-                    get: () => value,
-                    configurable: true,
-                    enumerable: true
-                });
-            } catch (e) {
-                console.log(`CONSEAL could not override navigator.${prop}`);
-            }
-        };
-
-        overrideProp(navigator, 'userAgent', nav.userAgent);
-        overrideProp(navigator, 'platform', nav.platform);
-        overrideProp(navigator, 'vendor', nav.vendor);
-        overrideProp(navigator, 'vendorSub', nav.vendorSub);
-        overrideProp(navigator, 'productSub', nav.productSub);
-        overrideProp(navigator, 'appVersion', nav.appVersion);
-        overrideProp(navigator, 'appMinorVersion', nav.appMinorVersion);
-        overrideProp(navigator, 'cpuClass', nav.cpuClass);
-        overrideProp(navigator, 'oscpu', nav.oscpu);
-        overrideProp(navigator, 'buildID', nav.buildID);
-
-        if (nav.hardwareConcurrency !== null) {
-            overrideProp(navigator, 'hardwareConcurrency', nav.hardwareConcurrency);
-        }
-        if (nav.deviceMemory !== null) {
-            overrideProp(navigator, 'deviceMemory', nav.deviceMemory);
-        }
-        if (nav.maxTouchPoints !== null) {
-            overrideProp(navigator, 'maxTouchPoints', nav.maxTouchPoints);
-        }
-        
-        if (nav.plugins !== null) {
-            overrideProp(navigator, 'plugins', createPluginArray(nav.plugins));
-        }
-        if (nav.mimeTypes !== null) {
-            overrideProp(navigator, 'mimeTypes', createMimeTypeArray(nav.mimeTypes));
-        }
-    }
-
-    if (profile.screen && window.screen) {
-        const scr = profile.screen;
-
-        const screenProxy = new Proxy(window.screen, {
-            get (target, prop) {
-                if (prop === 'width' && scr.width !== undefined) { return scr.width; }
-                if (prop === 'height' && scr.height !== undefined) { return scr.height; }
-                if (prop === 'availHeight' && scr.availHeight !== undefined) { return scr.availHeight; }
-                if (prop === 'deviceScaleFactor' && scr.deviceScaleFactor !== undefined) { return scr.deviceScaleFactor; }
-                return Reflect.get(target, prop);
-            }
-        });
-
-        Object.defineProperty(window, 'screen', {
-            value: screenProxy,
-            configurable: true,
-            writable: true
-        });
-    }
-
-    function createPluginArray(plugins) {
-        const arr = [];
-        arr.namedItem = (name) => plugins.find(p => p.name === name) || null;
-        arr.refresh = () => {};
-        arr.length = plugins.length;
-        plugins.forEach((p, i) => {
-            arr[i] = {
-                name: p.name,
-                filename: p.filename,
-                description: p.description,
-                length: p.__mimeTypes?.length || 0,
-                item: (idx) => p.__mimeTypes?.[idx] || null,
-                namedItem: (type) => p.__mimeTypes?.find(m => m === type) || null
-            };
-            Object.defineProperty(arr, i, { enumerable: true });
-        });
-        return arr;
-    }
-
-    function createMimeTypeArray(mimeTypes) {
-        const arr = [];
-        arr.namedItem = (type) => mimeTypes.find(m => m.type === type) || null;
-        arr.length = mimeTypes.length;
-        mimeTypes.forEach((m, i) => {
-            arr[i] = {
-                type: m.type,
-                suffixes: m.suffixes,
-                description: m.description,
-                enabledPlugin: arr
-            };
-            Object.defineProperty(arr, i, { enumerable: true });
-        });
-        return arr;
     }
 }
 
@@ -348,7 +311,8 @@ async function getDomainRatingAndAlternatives(inp) {
 }
 
 function getProfileForTab(tabId) {
-    return tabProfiles.get(tabId)?.data || null;
+    const profile = tabProfiles.get(tabId)?.data || null;
+    return profile;
 }
 
 function regenerateProfileForTab(tabId, osPreference = 'randomDesktop') {
@@ -367,7 +331,7 @@ export default {
     getAllSessionAttempts,
     handleFingerprinting,
     getDomainRating,
-    getDomainRatingAndAlternatives//,
-    // getProfileForTab,
-    // regenerateProfileForTab
+    getDomainRatingAndAlternatives,
+    getProfileForTab,
+    regenerateProfileForTab
 };

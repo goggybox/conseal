@@ -12,7 +12,7 @@
 // Copyright (C) sereneblue <https://github.com/sereneblue/chameleon>
 // --------------------------------------------------------------------
 
-let devices = {
+export const devices = {
   mobile: {
     and1: [
       {
@@ -560,8 +560,6 @@ devices.tablet.ios3 = devices.tablet.ios2.map((d) => {
   return { build: '21B74', name: d.name, viewport: d.viewport, deviceScaleFactor: d.deviceScaleFactor };
 });
 
-let getDevice = (hardware, id) => {
+export const getDevice = (hardware, id) => {
   return devices[hardware][id][Math.floor(Math.random() * devices[hardware][id].length)];
 };
-
-export { getDevice };
