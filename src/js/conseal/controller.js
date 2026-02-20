@@ -10,8 +10,13 @@
 import audioDefense from "./defenses/audio/injector.js";
 import statsStorage from "./statsController.js";
 import tosdr from "../../data/tosdr/controller.js";
+import { Generator } from "./defenses/profiles/profiles.js";
 
 let badger;
+
+
+let profileGenerator;
+let tabProfiles = new Map(); // maintain separate profiles for each tab
 
 /**
  * entries keyed by tabId:
@@ -30,7 +35,7 @@ let sessionAttempts = new Map();
 
 function init(data) {
     badger = data["badger"];
-    console.log("CONSEAL: Initialised Conseal");
+    profileGenerator = new Generator([]);
 
     // run injectOnPageLoad when page load event fires
     browser.webNavigation.onCommitted.addListener(
@@ -39,10 +44,38 @@ function init(data) {
     );
 
     // clean up sessionAttempts when a tab closes
+    // also clean up the tab's profile.
     browser.tabs.onRemoved.addListener((tabId) => {
         sessionAttempts.delete(tabId);
+        tabProfiles.delete(tabId);
     });
+
+    console.log("CONSEAL: Initialised Conseal");
 };
+
+function getOrCreateProfileForTab(tabId, osPreference = 'randomDesktop') {
+    if (tabProfiles.has(tabId)) {
+        // return existing profile for tab
+        return tabProfiles.get(tabId);
+    }
+
+    // generate new profile for the tab ...
+
+    const profileId = profileGenerator.getRandomByDevice(osPreference);
+    if (profileId === 'none') {
+        return null;
+    }
+
+    const profile = profileGenerator.getProfile(profileId);
+
+    tabProfiles.set(tabId, {
+        id: profileId,
+        data: profile,
+        createdAt: Date.now()
+    });
+
+    return tabProfiles.get(tabId);
+}
 
 function injectOnPageLoad(details) {
     const { tabId, frameId, url } = details;
@@ -67,10 +100,134 @@ function injectOnPageLoad(details) {
     if (level === 2) {
         // HIGH LEVEL defenses:
         //      - AudioContext (handled here)
+        //      - profile generation
         audioDefense.inject(ctx);
+
+        // const profileEntry = getOrCreateProfileForTab(tabId, 'randomDesktop');
+        // if (profileEntry) {
+        //     applyFingerprintProfile(tabId, profileEntry.data);
+        // }
     }
     else if (level === 1) {
         // MILD LEVEL defenses
+    }
+}
+
+async function applyFingerprintProfile(tabId, profile) {
+    try {
+        await chrome.scripting.executeScript({
+            target: { tabId: tabId, allFrames: false },
+            func: spoofPageContext,
+            args: [profile]
+        });
+    } catch (err) {
+        console.warn(`CONSEAL failed to inject profile for tab ${tabId}:`, err);
+    }
+}
+function spoofPageContext(profile) {
+    if (window.__consealProfileApplied) {
+        return;
+    }
+    window.__consealProfileApplied = true;
+
+    if (profile.navigator) {
+        const nav = profile.navigator;
+
+        const overrideProp = (obj, prop, value) => {
+            if (value === null || value === undefined) { return; }
+            try {
+                Object.defineProperties(obj, prop, {
+                    get: () => value,
+                    configurable: true,
+                    enumerable: true
+                });
+            } catch (e) {
+                console.log(`CONSEAL could not override navigator.${prop}`);
+            }
+        };
+
+        overrideProp(navigator, 'userAgent', nav.userAgent);
+        overrideProp(navigator, 'platform', nav.platform);
+        overrideProp(navigator, 'vendor', nav.vendor);
+        overrideProp(navigator, 'vendorSub', nav.vendorSub);
+        overrideProp(navigator, 'productSub', nav.productSub);
+        overrideProp(navigator, 'appVersion', nav.appVersion);
+        overrideProp(navigator, 'appMinorVersion', nav.appMinorVersion);
+        overrideProp(navigator, 'cpuClass', nav.cpuClass);
+        overrideProp(navigator, 'oscpu', nav.oscpu);
+        overrideProp(navigator, 'buildID', nav.buildID);
+
+        if (nav.hardwareConcurrency !== null) {
+            overrideProp(navigator, 'hardwareConcurrency', nav.hardwareConcurrency);
+        }
+        if (nav.deviceMemory !== null) {
+            overrideProp(navigator, 'deviceMemory', nav.deviceMemory);
+        }
+        if (nav.maxTouchPoints !== null) {
+            overrideProp(navigator, 'maxTouchPoints', nav.maxTouchPoints);
+        }
+        
+        if (nav.plugins !== null) {
+            overrideProp(navigator, 'plugins', createPluginArray(nav.plugins));
+        }
+        if (nav.mimeTypes !== null) {
+            overrideProp(navigator, 'mimeTypes', createMimeTypeArray(nav.mimeTypes));
+        }
+    }
+
+    if (profile.screen && window.screen) {
+        const scr = profile.screen;
+
+        const screenProxy = new Proxy(window.screen, {
+            get (target, prop) {
+                if (prop === 'width' && scr.width !== undefined) { return scr.width; }
+                if (prop === 'height' && scr.height !== undefined) { return scr.height; }
+                if (prop === 'availHeight' && scr.availHeight !== undefined) { return scr.availHeight; }
+                if (prop === 'deviceScaleFactor' && scr.deviceScaleFactor !== undefined) { return scr.deviceScaleFactor; }
+                return Reflect.get(target, prop);
+            }
+        });
+
+        Object.defineProperty(window, 'screen', {
+            value: screenProxy,
+            configurable: true,
+            writable: true
+        });
+    }
+
+    function createPluginArray(plugins) {
+        const arr = [];
+        arr.namedItem = (name) => plugins.find(p => p.name === name) || null;
+        arr.refresh = () => {};
+        arr.length = plugins.length;
+        plugins.forEach((p, i) => {
+            arr[i] = {
+                name: p.name,
+                filename: p.filename,
+                description: p.description,
+                length: p.__mimeTypes?.length || 0,
+                item: (idx) => p.__mimeTypes?.[idx] || null,
+                namedItem: (type) => p.__mimeTypes?.find(m => m === type) || null
+            };
+            Object.defineProperty(arr, i, { enumerable: true });
+        });
+        return arr;
+    }
+
+    function createMimeTypeArray(mimeTypes) {
+        const arr = [];
+        arr.namedItem = (type) => mimeTypes.find(m => m.type === type) || null;
+        arr.length = mimeTypes.length;
+        mimeTypes.forEach((m, i) => {
+            arr[i] = {
+                type: m.type,
+                suffixes: m.suffixes,
+                description: m.description,
+                enabledPlugin: arr
+            };
+            Object.defineProperty(arr, i, { enumerable: true });
+        });
+        return arr;
     }
 }
 
@@ -190,6 +347,15 @@ async function getDomainRatingAndAlternatives(inp) {
     }
 }
 
+function getProfileForTab(tabId) {
+    return tabProfiles.get(tabId)?.data || null;
+}
+
+function regenerateProfileForTab(tabId, osPreference = 'randomDesktop') {
+    tabProfiles.delete(tabId);
+    return getOrCreateProfileForTab(tabId, osPreference);
+}
+
 export default {
     init,
     injectOnPageLoad,
@@ -201,5 +367,7 @@ export default {
     getAllSessionAttempts,
     handleFingerprinting,
     getDomainRating,
-    getDomainRatingAndAlternatives
+    getDomainRatingAndAlternatives//,
+    // getProfileForTab,
+    // regenerateProfileForTab
 };

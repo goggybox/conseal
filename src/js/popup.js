@@ -991,6 +991,7 @@ function createBreakageNote(domain, i18n_message_key) {
  */
 function refreshPopup() {
   window.SLIDERS_DONE = false;
+  if (!POPUP_DATA) { return; }
 
   // must be a special browser page,
   if (POPUP_DATA.noTabData) {
@@ -1345,7 +1346,7 @@ $(function () {
       tabUrl: tab.url
     }, (response) => {
       setPopupData(response);
-      if (POPUP_DATA.noTabData && tab.url && (
+      if (POPUP_DATA?.noTabData && tab.url && (
         tab.url == chrome.runtime.getURL('/skin/firstRun.html') ||
         tab.url.startsWith(chrome.runtime.getURL('/skin/options.html')))) {
         POPUP_DATA.showDisableButtonTip = true;

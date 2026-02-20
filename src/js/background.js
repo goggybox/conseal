@@ -39,7 +39,42 @@ import utils from "./utils.js";
 
 // ---------- CONSEAL CHANGES ----------
 import conseal from "./conseal/controller.js";
+// import { getProfileForTab } from './controller.js';
+
+
+// chrome.webRequest.onBeforeSendHeaders.addListener(
+//   (details) => {
+//     const profile = getProfileForTab(details.tabId);
+//     if (!profile?.accept) {
+//       return;
+//     }
+
+//     const newHeaders = details.requestHeaders.map(header => {
+//       const nameLower = header.name.toLowerCase();
+
+//       if (nameLower === 'accept') {
+//         return { name: header.name, value: profile.accept.header };
+//       }
+//       if (nameLower === 'accept-encoding') {
+//         const isHttps = details.url.startsWith('https');
+//         return {
+//           name: header.name,
+//           value: isHttps ? profile.accept.encodingHTTPS : profile.accept.encodingHTTP
+//         };
+//       }
+//       return header;
+//     });
+
+//     return { requestHeaders: newHeaders };
+//   },
+//   {urls: ['<all_urls>']},
+//   ['blocking', 'requestHeaders', 'extraHeaders']
+// );
+
+
 // ----------   END CHANGES   ----------
+
+
 
 /**
  * Privacy Badger constructor.
